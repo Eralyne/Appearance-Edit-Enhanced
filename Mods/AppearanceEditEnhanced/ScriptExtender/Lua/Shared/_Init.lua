@@ -1,9 +1,13 @@
 AEE = {}
-AEE.modTableKey = "AppearanceEditEnhanced"
 AEE.modPrefix = "AEE"
-AEE.modVersion = { major = 2, minor = 1, revision = 2 }
+AEE.modTableKey = ""
+AEE.modVersion = { major = 0, minor = 0, revision = 0 }
 
-PersistentVarsTemplate = {}
+PersistentVarsTemplate = {
+    ["SpellOwners"] = {},
+    ["OriginalTemplates"] = {},
+    ["OriginCopiedChars"] = {}
+}
 
 PersistentVars = PersistentVarsTemplate
 

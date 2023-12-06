@@ -1,5 +1,10 @@
+Constants.ModUUID = "7b8366bd-abc1-4f9f-ba9d-585549b4a750"
+
 Constants.Replications = {
-    "CharacterCreationAppearance"
+    "CharacterCreationAppearance",
+    "GameObjectVisual",
+    "BodyType",
+    "Race",
 }
 
 Constants.SaveLoadReplications = {}
@@ -12,6 +17,210 @@ Constants.PermittedCopyObjects = {
 }
 
 Constants.ExcludedReplications = {
+    "GameObjectVisual"
+}
+
+Constants.PersistedTemplateKeys = {
+    "EquipmentRace",
+    "CharacterVisualResourceID",
+    "VisualTemplate",
+    "Icon",
+    "GeneratePortrait",
+    "Race",
+}
+
+Constants.PersistedOriginTemplateKeys = {
+    "ActivationGroupId",
+    "ActiveCharacterLightID",
+    "AliveInventoryType",
+    "AllowReceiveDecalWhenAnimated",
+    "AnimationSetResourceID",
+    "AnubisConfigName",
+    "AvoidTraps",
+    "BloodSurfaceType",
+    "BloodType",
+    "CameraOffset",
+    "CanBePickedUp",
+    "CanBePickpocketed",
+    "CanBeTeleported",
+    "CanClimbLadders",
+    "CanConsumeItems",
+    "CanOpenDoors",
+    "CanShootThrough",
+    "CanWalkThroughDoors",
+    "CastShadow",
+    "CharacterVisualResourceID",
+    "CollideWithCamera",
+    -- "CombatComponent", -- THIS IS THE PROBLEM RIGHT HERE
+    "CoverAmount",
+    "CriticalHitType",
+    "DeathEffect",
+    "DeathRaycastHeight",
+    "DeathRaycastMaxLength",
+    "DeathRaycastMinLength",
+    "DeathRaycastVerticalLength",
+    "DefaultDialog",
+    "DefaultState",
+    "DisableEquipping",
+    "DisintegrateFX",
+    "DisintegratedResourceID",
+    -- "DisplayName", -- Problem
+    "Equipment",
+    "EquipmentRace",
+    -- "EquipmentTypes", -- Problem
+    -- "ExcludeInDifficulty", -- Problem
+    "ExplodedResourceID",
+    "ExplosionFX",
+    -- "FadeChildren", -- Problem
+    "FadeGroup",
+    "Fadeable",
+    "FileName",
+    "Flags",
+    "FoleyLongResourceID",
+    "FoleyMediumResourceID",
+    "FoleyShortResourceID",
+    "ForceLifetimeDeath",
+    "GeneratePortrait",
+    "GroupID",
+    "HasGameplayValue",
+    "HasParentModRelation",
+    "HasPlayerApprovalRating",
+    "HierarchyOnlyFade",
+    "Icon",
+    "Id",
+    "InfluenceTreasureLevel",
+    "InventoryType",
+    "IsDeleted",
+    "IsDroppedOnDeath",
+    "IsEquipmentLootable",
+    "IsGlobal",
+    "IsLootable",
+    "IsMovementEnabled",
+    "IsPlayer",
+    "IsReflecting",
+    "IsShadowProxy",
+    "IsSimpleCharacter",
+    "IsSteeringEnabled",
+    "IsTradable",
+    "IsWorldClimbingEnabled",
+    "JumpUpLadders",
+    "LadderAttachOffset",
+    "LadderBlendspace_Attach_Down",
+    "LadderBlendspace_Attach_Up",
+    "LadderBlendspace_Detach_Down",
+    "LadderBlendspace_Detach_Up",
+    "LadderLoopSpeed",
+    "LevelName",
+    "LevelOverride",
+    "LightChannel",
+    "LightID",
+    "MaxDashDistance",
+    "MovementAcceleration",
+    "MovementSpeedDash",
+    "MovementSpeedRun",
+    "MovementSpeedSprint",
+    "MovementSpeedStroll",
+    "MovementSpeedWalk",
+    "MovementStepUpHeight",
+    "MovementTiltToRemap",
+    "Name",
+    -- "OnlyInDifficulty", -- Problem
+    "ParentTemplateId",
+    "PhysicsOpenTemplate",
+    "PhysicsTemplate",
+    -- "PickingPhysicsTemplates", -- Problem
+    "ProbeLookAtOffset",
+    "ProbeSpineAOffset",
+    "ProbeSpineBOffset",
+    "ProbeTiltToOffset",
+    "Race",
+    "RagdollTemplate",
+    "ReceiveDecal",
+    "RenderChannel",
+    "SeeThrough",
+    "ShootThroughType",
+    "SoftBodyCollisionTemplate",
+    "SoundAttenuation",
+    "SoundInitEvent",
+    "SoundMovementStartEvent",
+    "SoundMovementStopEvent",
+    "SoundObjectIndex",
+    -- "SpeakerGroupList", -- Problem
+    "SpellSet",
+    "SpotSneakers",
+    "Stats",
+    -- "StatusList", -- Problem
+    "SteeringSpeedCurveWithoutTransitions",
+    "SteeringSpeedFallback",
+    "SteeringSpeed_CastingCurve",
+    "SteeringSpeed_MovingCurve",
+    "TemplateName",
+    -- "Title", -- Problem
+    -- "TradeTreasures", -- Problem
+    -- "Transform", -- Problem
+    -- "Treasures", -- Problem
+    "TrophyID",
+    "TurningNodeAngle",
+    "TurningNodeOffset",
+    "UseOcclusion",
+    "UseSoundClustering",
+    "UseStandAtDestination",
+    "VisualTemplate",
+    "VocalAlertResourceID",
+    "VocalAngryResourceID",
+    "VocalAnticipationResourceID",
+    "VocalAttackResourceID",
+    "VocalAwakeResourceID",
+    "VocalBoredResourceID",
+    "VocalBuffResourceID",
+    "VocalCinematicSuffix",
+    "VocalDeathResourceID",
+    "VocalDodgeResourceID",
+    "VocalEffortsResourceID",
+    "VocalExhaustedResourceID",
+    "VocalFallResourceID",
+    "VocalGaspResourceID",
+    "VocalIdle1ResourceID",
+    "VocalIdle2ResourceID",
+    "VocalIdle3ResourceID",
+    "VocalIdleCombat1ResourceID",
+    "VocalIdleCombat2ResourceID",
+    "VocalIdleCombat3ResourceID",
+    "VocalInitiativeResourceID",
+    "VocalLaughterManiacalResourceID",
+    "VocalLaughterResourceID",
+    "VocalNoneResourceID",
+    "VocalPainResourceID",
+    "VocalRebornResourceID",
+    "VocalRecoverResourceID",
+    "VocalRelaxedResourceID",
+    "VocalShoutResourceID",
+    "VocalSnoreResourceID",
+    "VocalSpawnResourceID",
+    "VocalVictoryResourceID",
+    "VocalWeakResourceID",
+    "WalkThrough",
+    "WorldClimbingBlendspace_DownA",
+    "WorldClimbingBlendspace_DownB",
+    "WorldClimbingBlendspace_DownBHeight",
+    "WorldClimbingBlendspace_UpA",
+    "WorldClimbingBlendspace_UpB",
+    "WorldClimbingBlendspace_UpBHeight",
+    "WorldClimbingHeight",
+    "WorldClimbingRadius",
+    "WorldClimbingSpeed",
+    -- "field_50" -- Not a problem but I don't trust this
+    -- Works
+}
+
+-- In seconds
+Constants.TickDelay = 2
+
+Constants.CustomSpells = {
+    ["SpellsContainer"] = "AE_Spell_Container",
+    ["Resculpt"] = "Shout_Open_Creation",
+    ["Mirror"] = "Shout_Open_Mirror",
+    ["Respec"] = "Shout_Open_Respec"
 }
 
 Constants.DefaultUUIDs = {
@@ -20,7 +229,9 @@ Constants.DefaultUUIDs = {
     ["TempMaleVoice"] = "f667ae40-070f-42ad-a265-b589e157015b",
     ["FullCeramorphTag"] = "FULL_CEREMORPH_3797bfc4-8004-4a19-9578-61ce0714cc0b",
     ["MagicMirrorTemplate"] = "UNI_MagicMirror_72ae7a39-d0ce-4cb6-8d74-ebdf7cdccf91",
-    ["MagicMirrorDialogue"] = "GLO_MagicMirror_f9af5a3b-fb57-b69d-7526-9abdaf50db78"
+    ["MagicMirrorDialogue"] = "GLO_MagicMirror_f9af5a3b-fb57-b69d-7526-9abdaf50db78",
+    ["DarkUrgeTag"] = "fe825e69-1569-471f-9b3f-28fd3b929683",
+    ["GenericTag"] = "730e82f3-c067-44a4-985b-0dfe079d4fea",
 }
 
 Constants.CharacterOrigins = {
@@ -36,6 +247,20 @@ Constants.CharacterOrigins = {
     "S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679"
 }
 
+-- TODO: Don't do this?
+Constants.CharacterOriginsUUIDs = {
+    "2c76687d-93a2-477b-8b18-8a14b549304c",
+    "0de603c5-42e2-4811-9dad-f652de080eba",
+    "25721313-0c15-4935-8176-9f134385451b",
+    "7628bc0e-52b8-42a7-856a-13a6fd413323",
+    "91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
+    "ad9af97d-75da-406a-ae13-7071c563f604",
+    "c7c13742-bacd-460a-8f65-f864fe41f255",
+    "58a69333-40bf-8358-1d17-fff240d7fb12",
+    "c774d764-4a17-48dc-b470-32ace9ce447d",
+    "3ed74f06-3c60-42dc-83f6-f034cb47c679"
+}
+
 Constants.MaleSecretOrigins = {
     "S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba",
     "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
@@ -44,6 +269,68 @@ Constants.MaleSecretOrigins = {
 Constants.FemaleSecretOrigins = {
     "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
     "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
+}
+
+Constants.ReallyTags = {
+    "7e97c590-911f-422a-bdb6-068c137eb2c8", -- ["REALLY_AARAKOCRA"]
+    "2fddf7dd-f79b-4998-882c-d7257badbfe6", -- ["REALLY_AASIMAR"]
+    -- "0c8221b4-43c8-4c9e-aa00-1832f4d9bcb9", -- ["REALLY_ALFIRA"]
+    "6591a20a-12de-46ff-bf82-b866cd97bb9a", -- ["REALLY_ASMODEUSTIEFLING"]
+    -- "ffd08582-7396-4cac-bcd4-8f9cd0fd8ef3", -- ["REALLY_ASTARION"]
+    -- "1029b3e3-3ff0-4d73-b4ed-79b622cad4f9", -- ["REALLY_BESTIAL"]
+    -- "cd611d7d-b67d-42b4-a75c-a0c6091ef8a2", -- ["REALLY_DARK_URGE"]
+    "17d29357-beba-4096-accc-c28bdea88fda", -- ["REALLY_DEEPGNOME"]
+    "8fac3253-331c-4b9f-95fb-e2196fd1bc8d", -- ["REALLY_DISPLACER_BEAST"]
+    "39783f17-8484-46a6-aa3b-f3d51122e5f3", -- ["REALLY_DRAGONBORN"]
+    "676e854b-d74b-44f3-8363-3ef27164a54d", -- ["REALLY_DROWELF"]
+    "3dbe23e0-2c9f-4a81-b586-ec6e50f720e1", -- ["REALLY_DROWHALFELF"]
+    "45b007f7-f4f6-46e2-9480-395a49b87ef3", -- ["REALLY_DUERGARDWARF"]
+    "ad129444-0f41-4114-9ee5-2b9902d7ca8d", -- ["REALLY_DWARF"]
+    "772b1dc6-14be-417f-afa3-c6cf364f45b4", -- ["REALLY_ELF"]
+    "9deae354-0108-40b4-a7db-6eb23fba050f", -- ["REALLY_FIRBOLG"]
+    "b0401c02-70b3-47f5-998f-8d440ad6954f", -- ["REALLY_FORESTGNOME"]
+    -- "9b0354c0-56d9-4723-8034-918ac9abab19", -- ["REALLY_GALE"]
+    "aa68eccb-7875-436f-881e-c3775eee37f6", -- ["REALLY_GENASI"]
+    -- "264a6880-9a51-429c-a9fc-97f8952baf90", -- ["REALLY_GENERIC"]
+    "e49c027c-6ec6-4158-9afb-8b59236d10fd", -- ["REALLY_GITHYANKI"]
+    "42483542-7915-4de5-a7d9-ac0d15fe301c", -- ["REALLY_GNOME"]
+    "277f9609-ad0c-4883-b56d-0850904e88df", -- ["REALLY_HALFELF"]
+    "2b40a033-7a5c-47e9-92f0-7de9b5cd3a42", -- ["REALLY_HALFLING"]
+    "ab3eff19-d094-4102-88bd-d097b6b6e4f0", -- ["REALLY_HALFORC"]
+    -- "9b8709f9-8d2a-4b4e-a465-8505c561d7f5", -- ["REALLY_HALSIN"]
+    "78884c5f-9504-41af-912d-ce212df0ebea", -- ["REALLY_HIGHELF"]
+    "bb7c731c-7af7-4c2d-b3d7-b4e8bd86a244", -- ["REALLY_HIGHHALFELF"]
+    "9a92ac6d-b7cc-4ccb-8965-074c6b36a342", -- ["REALLY_HILLDWARF"]
+    "8e288154-e7ca-4277-b2df-e61639b1cce8", -- ["REALLY_HUMAN"]
+    -- "8457eb5f-036c-4143-b6cf-447a9f555c7a", -- ["REALLY_JAHEIRA"]
+    -- "1a2f70d6-8ead-4eb5-a824-79ee1971764a", -- ["REALLY_KARLACH"]
+    "ec90a39d-ce0e-4ae1-b74d-0906dfd9a1d2", -- ["REALLY_KENKU"]
+    -- "b5682d1d-c395-489c-9675-1f9b0c328ea5", -- ["REALLY_LAEZEL"]
+    "da1d4f47-8583-49a1-b262-d77d361b2e09", -- ["REALLY_LIGHTFOOTHALFLING"]
+    "ef8444e2-a240-4cc1-9f57-73db6d99bc96", -- ["REALLY_LIZARDFOLK"]
+    "c71eb8de-74e3-4d70-9826-22da7e2dc607", -- ["REALLY_LOLTHDROWELF"]
+    "c70e1dc2-72d4-44f9-83fd-c63d247edd9b", -- ["REALLY_MEPHISTOPHELESTIEFLING"]
+    -- "aeb694fc-83fb-452d-819a-b97ba442dc42", -- ["REALLY_MINSC"]
+    -- "3e84e1cd-2193-4f9f-80b4-c2ededefaea6", -- ["REALLY_MINTHARA"]
+    "18659b46-73ae-49d2-85a8-7e6cc43ce94f", -- ["REALLY_MOUNTAINDWARF"]
+    "4cb02915-7ad7-4141-907e-93253c6a8644", -- ["REALLY_PLANAR"]
+    -- "987a41e3-2482-4c74-8c30-f3843cfdb7f3", -- ["REALLY_RARE"]
+    "df697d73-5469-405a-aa95-6e1e720c5ee6", -- ["REALLY_ROCKGNOME"]
+    "d2d60a81-688e-4d3d-ba56-3e467cae37fc", -- ["REALLY_SELDARINEDROWELF"]
+    -- "642d2aee-e3df-47e3-9f47-bbcd441bb9e0", -- ["REALLY_SHADOWHEART"]
+    "058df86a-97b6-4dc4-a246-a1db65ff3c0f", -- ["REALLY_STOUTHALFLING"]
+    "bafc25f8-20b0-4693-a0fe-73967befcf05", -- ["REALLY_TABAXI"]
+    "7bf7207f-7406-49c0-b501-eaaa2bb4efd7", -- ["REALLY_TIEFLING"]
+    "7839884d-892a-4d60-95cc-b073420d8474", -- ["REALLY_TORTLE"]
+    "2a7e679e-2567-47f7-9645-550471cffcf7", -- ["REALLY_TRITON"]
+    -- "2d0a73b9-f113-4d35-bdee-a31ab9163d74", -- ["REALLY_UNDERDARK"]
+    -- "2cff7db0-ae50-4267-82ea-84e961d3e3fa", -- ["REALLY_US"]
+    "e30b5b4d-2ceb-4791-914e-b6c6c122f059", -- ["REALLY_WARFORGED"]
+    "b12e8dff-c1f0-4e9c-9ec0-1cafd22bb637", -- ["REALLY_WOODELF"]
+    "8ac1b27c-c5c4-4a2c-95dd-256e4349e483", -- ["REALLY_WOODHALFELF"]
+    -- "5f40def5-d3ec-4698-a367-01a339888956", -- ["REALLY_WYLL"]
+    "3d80e0d5-0e28-4363-b153-c1a1076d36d4", -- ["REALLY_YUANTIPUREBLOOD"]
+    "3a5efd84-5925-4a75-83ee-4f336b56f716", -- ["REALLY_ZARIELTIEFLING"]
 }
 
 
