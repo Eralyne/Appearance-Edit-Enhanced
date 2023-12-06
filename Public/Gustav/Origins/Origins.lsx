@@ -146,7 +146,7 @@
                     <attribute id="RaceUUID" type="guid" value="b6dccbed-30f3-424b-a181-c4540cf38197"/>
                     <attribute id="SubRaceUUID" type="guid" value="88d0d219-9dcb-462b-aab6-ccf31eeee2e3"/>
                     <attribute id="UUID" type="guid" value="b8b4a974-b045-45f6-9516-b457b8773abd"/>
-                    <attribute id="Unique" type="bool" value="true"/>
+                    <attribute id="Unique" type="bool" value="false"/>
                     <attribute id="VoiceTableUUID" type="guid" value="d7f1f43f-840f-44ca-90f4-ba80c0f31d19"/>
                     <children>
                         <node id="ReallyTags">
