@@ -188,6 +188,12 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
     end
 end)
 
+-- Ext.Osiris.RegisterListener("Died", 1, "after", function(character)
+--     if (Utils.IsOrigin(character) and PersistentVars["OriginCopiedChars"][character]) then
+--         PersistentVars["OriginCopiedChars"][character] = nil
+--         PersistentVars["OriginalTemplates"][Utils.GetGUID(character)] = nil
+--     end
+-- end)
 
 -- TODO: Allow resetting origin appearance back to original
 -- Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(event)

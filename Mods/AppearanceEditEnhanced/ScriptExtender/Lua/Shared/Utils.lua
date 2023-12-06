@@ -126,7 +126,11 @@ end
 -------------------------------------------------------------------------------------------------
 
 function Utils.TryGetProxy(entity, proxy)
-    return entity[proxy]
+    if (entity[proxy] ~= nil) then
+        return entity[proxy]
+    else
+        error("Not a valid proxy")
+    end
 end
 
 function Utils.TryGetDB(query, arity)
@@ -484,7 +488,6 @@ function Utils.InsertIntoHotbarSlot(character, persistantChar)
 
     if (CharacterHotbar) then
         local HotBar = Ext.Entity.Get(character).HotbarContainer.Containers.DefaultBarContainer
-
 
         for _, bar in pairs(HotBar) do
             if (bar and bar["Index"] == BarIndex) then
