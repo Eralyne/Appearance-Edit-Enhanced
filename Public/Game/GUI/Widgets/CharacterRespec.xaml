@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     d:DesignHeight="2160" d:DesignWidth="3840"
     ls:UIWidget.ContextName="CharacterCreation"
-    ls:TooltipExtender.Owner="{Binding DataContext.CurrentPlayer.SelectedCharacter}"
+    ls:TooltipExtender.Owner="{Binding DummyCharacter}"
     d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}">
 
     <ls:UIWidget.Resources>
@@ -39,7 +39,7 @@
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </ControlTemplate.Resources>
-                <Grid ls:TooltipExtender.Owner="{Binding DataContext.CurrentPlayer.SelectedCharacter}" IsEnabled="{Binding IsLocked, Converter={StaticResource InvertBoolConverter}}">
+                <Grid>
 
                     <Grid x:Name="appearanceRightSidePanels" HorizontalAlignment="Right">
                         <Grid.RenderTransform>
@@ -169,12 +169,13 @@
                                 <ListBoxItem x:Name="subRaceTab" Tag="subrace" Visibility="Collapsed"/>
 
                                 <ListBoxItem x:Name="generalTab" Tag="general" IsSelected="True"/>
-                                <ListBoxItem x:Name="tattooAndPiercingTab" Tag="tattooandpiercing" Visibility="{Binding SelectedOrigin.IsLockedAppearance, Converter={StaticResource BoolToCollapsedConverter}}"/>
+                                <ListBoxItem x:Name="tattooAndPiercingTab" Tag="tattooandpiercing" Visibility="{Binding SelectablePiercings.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
                                 <ListBoxItem x:Name="eyesTab" Tag="eyes" Visibility="{Binding SelectedOrigin.IsLockedAppearance, Converter={StaticResource BoolToCollapsedConverter}}"/>
-                                <ListBoxItem x:Name="makeupTab" Tag="makeup" Visibility="{Binding SelectedOrigin.IsLockedAppearance, Converter={StaticResource BoolToCollapsedConverter}}"/>
-                                <ListBoxItem x:Name="hairTab" Tag="hair" Visibility="{Binding SelectableHair.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                <ListBoxItem x:Name="makeupTab" Tag="makeup" Visibility="{Binding SelectableMakeup.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+								<ListBoxItem x:Name="hairTab" Tag="hair" Visibility="{Binding SelectableHair.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
                                 <ListBoxItem x:Name="facialHairTab" Tag="facialhair" Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
                                 <ListBoxItem x:Name="hornsTab" Tag="horns" Visibility="{Binding SelectableHorns.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                <ListBoxItem x:Name="tailTab" Tag="tail" Visibility="{Binding Path=SelectableTail.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
                                 <ListBoxItem x:Name="draconicTab" Tag="draconic" Visibility="{Binding Path=SelectedSubClass.IsDraconicSorcerer, Converter={StaticResource BoolToVisibleConverter}, FallbackValue=Collapsed}"/>
                                 <ListBoxItem x:Name="tailTab" Tag="tail" Visibility="{Binding Path=SelectableTail.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
 
@@ -183,8 +184,6 @@
 
                         <!-- Appearance Buttons on Appearance Page -->
                         <Control x:Name="appearanceButtons" Template="{StaticResource AppearanceButtonsTemplate}" Margin="0,0,492,64" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-
-                        
 
                     </Grid>
 
@@ -1197,7 +1196,6 @@
                 -->
                 <TranslateTransform/>
                 <!-- This is for reloadUIs to start on Appearance page. Will be removed when CC orangebox is complete
-                <TranslateTransform X="{Binding Path=ActualWidth, ElementName=gamePlayPage, Converter={StaticResource MultiplierConverter}, ConverterParameter=-1}"/>
                 -->
             </Control.RenderTransform>
 

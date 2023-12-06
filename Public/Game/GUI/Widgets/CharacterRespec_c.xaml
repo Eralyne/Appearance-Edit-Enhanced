@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     d:DesignHeight="2160" d:DesignWidth="3840"
     ls:UIWidget.ContextName="CharacterCreation"
-    ls:TooltipExtender.Owner="{Binding DataContext.CurrentPlayer.SelectedCharacter}"
+    ls:TooltipExtender.Owner="{Binding DummyCharacter}"
     d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}"
     FocusDown="UIDown" FocusLeft="UILeft" FocusRight="UIRight" FocusUp="UIUp" ls:MoveFocus.FocusMovementMode="Closest" CanCacheFocusSurroundingElements="False">
 
@@ -630,7 +630,7 @@
                     <ListBox x:Name="vitiligo" Tag="{StaticResource FalseValue}" ls:AttachedProperties.InheritedTag="vitiligo" DataContext="{Binding ApperanceScalarVitiligo}" Template="{StaticResource AppearanceSliderCarousel}" Visibility="Collapsed"/>
 
 
-                    <ListBox x:Name="enableHeterochromia" Visibility="{Binding SelectedOrigin.IsLockedAppearance, Converter={StaticResource BoolToCollapsedConverter}}">
+                    <ListBox x:Name="enableHeterochromia">
                         <ListBox.Template>
                             <ControlTemplate>
                                 <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource AppearanceListButtonTemplate}" HorizontalAlignment="Center">
@@ -893,7 +893,7 @@
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition Binding="{Binding IsDragonborn}" Value="false"/>
-                            <Condition Binding="{Binding SelectedOrigin.IsLockedAppearance }" Value="false"/>
+                            <!-- <Condition Binding="{Binding SelectedOrigin.IsLockedAppearance }" Value="false"/> -->
                         </MultiDataTrigger.Conditions>
                         <MultiDataTrigger.Setters>
                             <Setter TargetName="age" Property="Visibility" Value="Visible"/>
@@ -2156,9 +2156,6 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding AppearanceValidationError, Converter={StaticResource NullToBoolFalseConverter}, ConverterParameter='EmptyString', FallbackValue=False}" Value="True">
                                     <Setter TargetName="InvalidAppearanceError" Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding SelectedOrigin.IsLockedAppearance}" Value="True">
-                                    <Setter TargetName="appearanceTab" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
 
                                 <!-- Split Screen variation -->
