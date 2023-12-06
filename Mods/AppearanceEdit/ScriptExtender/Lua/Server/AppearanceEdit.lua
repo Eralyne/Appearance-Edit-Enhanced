@@ -117,12 +117,12 @@ local function DBCleanOperations(uuid, entry)
     return MarkedForDelete
 end
 
-local TimerActive
+-- local TimerActive
 local Faction
 
 Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, name)
     if name == "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS" then
-        TimerActive = false
+        -- TimerActive = false
 
         CharacterMoveTo(uuid, SpellCaster, "", "", 1)
         MoveAllItemsTo(SpellCaster, uuid, 1, 1, 1, 1)
@@ -151,7 +151,7 @@ Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, n
                 Osi["DB_ApprovalRating"]:Delete(table.unpack(entry))
             elseif Modified then
                 Osi["DB_ApprovalRating"](table.unpack(InsertTable))
-                -- ChangeApprovalRating(InsertTable[1], uuid, 0, InsertTable[3])
+                ChangeApprovalRating(InsertTable[1], uuid, 0, InsertTable[3])
                 -- Ext.Utils.Print("Changing Approval Rating: ", InsertTable[1], uuid, InsertTable[3])
             end
         end
@@ -270,8 +270,7 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
             end
 
             if key == #DBQueries and not CleanUp then
-                ObjectTimerLaunch(uuid, "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS", 5000, 1)
-                TimerActive = true
+                ObjectTimerLaunch(uuid, "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS", 10000, 1)
             end
         end
 
@@ -284,10 +283,10 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
     end
 end)
 
-Ext.Osiris.RegisterListener("AddedTo", 3, "after", function (entity, char, _)
-    if TimerActive and not (string.find(entity, "Underwear", 1, true)) and not (string.find(entity, "ARM", 1, true)) and not (string.find(entity, "WPN", 1, true)) then
-        RequestDelete(entity)
-    end
-end)
+-- Ext.Osiris.RegisterListener("AddedTo", 3, "after", function (entity, char, _)
+--     if TimerActive and not (string.find(entity, "Underwear", 1, true)) and not (string.find(entity, "ARM", 1, true)) and not (string.find(entity, "WPN", 1, true)) then
+--         RequestDelete(entity)
+--     end
+-- end)
 
 -- It's testing time as I test all over the code
