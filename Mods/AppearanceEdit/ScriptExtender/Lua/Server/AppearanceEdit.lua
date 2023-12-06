@@ -167,6 +167,7 @@ local IgnoreDBs = utils_set({
     -- "DB_GlobalFlag",
     -- "DB_QRYRTN_CRIME_GetValidCrimeID",
     -- "DB_InternScene_CrimeActive",
+    "DB_GLO_PartyMembers_Kicked",
     "DB_GLO_Tutorials_EndTheDay_DepletedShortRestResourceOrSpell",
     "DB_GLO_Playable",
     "DB_MOO_KitchenFight_QtrMasterDisrupter",
@@ -346,7 +347,42 @@ end)
 Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _, _)
     if name == "SNEAKING" and string.find(guid, GetHostCharacter(), 1, true) then
         AddSpell(guid, "Shout_Open_Creation", 1, 1)
-    end
+
+        -- Do some retroactive fixes here :)
+        -- We get all the players in the game
+        local Players = {}
+
+        for _, entry in pairs(Osi["DB_Players"]:Get(nil)) do
+            table.insert(Players, entry[1])
+        end
+
+        Players = utils_set(Players)
+
+        local RemovedPlayers = {}
+
+        for _, entry in pairs(Osi["DB_GLO_PartyMembers_Kicked"]:Get(nil)) do
+            table.insert(RemovedPlayers, entry[1])
+        end
+
+        RemovedPlayers = utils_set(RemovedPlayers)
+
+        for _, entry in pairs(Osi["DB_ApprovalRating"]:Get(nil, nil, nil)) do
+            if (not Players[entry[2]] and not CharacterOrigins[entry[2]]) then
+                -- Kill all the left over characters
+                if (not RemovedPlayers[entry[2]]) then
+                    SetImmortal(entry[2], 0)
+                    Die(entry[2], 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 0)
+                    Osi["DB_GLO_PartyMembers_Kicked"](entry[2])
+                    Ext.Utils.Print("Brutally murdering ", entry[2])
+                    table.insert(RemovedPlayers, entry[2])
+                    RemovedPlayers = utils_set(RemovedPlayers)
+                end
+
+                -- Clear left over approval ratings
+                Osi["DB_ApprovalRating"]:Delete(table.unpack(entry))
+            end 
+        end
+     end
 end)
 
 -- Remove Resculpt on sneak end
@@ -383,6 +419,9 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
         -- end
 
         for _, query in pairs(DBQueries) do
+            -- Reset the SavedDB query before adding
+            SavedDBs[query] = nil
+
             local t = {}
             for v in query:gmatch("[^(]+") do
                 table.insert(t, v)
@@ -435,7 +474,9 @@ Ext.Osiris.RegisterListener("EntityEvent", 2, "after", function (entity, event)
         MakeNPC(SpellCaster)
         SetOnStage(SpellCaster, 0)
         Osi.PROC_RemoveAllPolymorphs(SpellCaster)
-        Osi.PROC_RemoveAllDialogEntriesForSpeaker(SpellCaster)
+        SetImmortal(SpellCaster, 0)
+        Die(SpellCaster, 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 0)
+        Osi["DB_GLO_PartyMembers_Kicked"](SpellCaster)
     end
 end)
 
@@ -448,14 +489,11 @@ Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, n
 
         for _, entry in ipairs(Osi["DB_ApprovalRating"]:Get(nil, nil, nil)) do
             local InsertTable = {}
-            local MarkedForDeletion = false
             local Modified = false
 
-            InsertTable, MarkedForDeletion, Modified = DBOperations(uuid, entry)
+            InsertTable, _, Modified = DBOperations(uuid, entry)
 
-            if MarkedForDeletion then
-                Osi["DB_ApprovalRating"]:Delete(table.unpack(entry))
-            elseif Modified then
+            if Modified then
                 Osi["DB_ApprovalRating"](table.unpack(InsertTable))
                 ChangeApprovalRating(InsertTable[1], uuid, 0, InsertTable[3])
                 -- Ext.Utils.Print("Changing Approval Rating: ", InsertTable[1], uuid, InsertTable[3])
@@ -529,19 +567,13 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
                     end
                 end,
                 ["14aec5bc-1013-4845-96ca-20722c5219e3"] = function ()
-                    if HasSpell(SpellCaster, "Shout_DarkUrge_Slayer") == 1 then
+                    if HasSpell(SpellCaster, "Shout_DarkUrge_Slayer") == 1 and HasSpell(uuid, "Shout_DarkUrge_Slayer") == 0 then
                         AddSpell(uuid, "Shout_DarkUrge_Slayer", 1, 1)
                     end
                 end,
                 ["79067d89-0cb1-47cf-a746-cc265948b527"] = function ()
-                    if HasActiveStatus(SpellCaster, "CURSEDTOME_THARCHIATE_TECHNICAL") == 1 and HasActiveStatus(uuid, "CURSEDTOME_THARCHIATE_TECHNICAL") == 0 then
-                        ApplyStatus(uuid, "CURSEDTOME_THARCHIATE_TECHNICAL", 100, -1)
-                        ApplyStatus(uuid, "CURSEDTOME_THARCHIATE_FALSE_LIFE", 100, -1)
-                    end
-                end,
-                ["32fe3265-f672-4846-9b56-7400f66c899f"] = function ()
-                    if HasSpell(SpellCaster, "Target_GLO_DangerousBook_SpeakWd") == 1 and HasSpell(uuid, "Target_GLO_DangerousBook_SpeakWd") == 0 then
-                        AddSpell(uuid, "Target_GLO_DangerousBook_SpeakWd", 1, 1)
+                    if HasPassive(SpellCaster, "CursedTome_FalseLife") == 1 and HasPassive(uuid, "CursedTome_FalseLife") == 0 then
+                        AddPassive(uuid, "CursedTome_FalseLife")
                     end
                 end,
                 ["4e24982b-24d2-7107-a817-caa317dffd26"] = function ()
@@ -549,11 +581,16 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
                         ApplyStatus(uuid, "CAMP_VOLO_ERSATZEYE", -1, 0, uuid)
                     end
                 end,
-                ["d1de279e-be63-9787-474a-c001fc38dc24"] = function ()
-                    if HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 1 and HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 0 then
-                        ApplyStatus(uuid, "GLO_PIXIESHIELD", -1, 0, uuid)
+                -- ["d1de279e-be63-9787-474a-c001fc38dc24"] = function ()
+                --     if HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 1 and HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 0 then
+                --         ApplyStatus(uuid, "GLO_PIXIESHIELD", -1, 0, uuid)
+                --     end
+                -- end,
+                ["365dbc98-808e-4c11-90df-fdc92e30720f"] = function ()
+                    if HasSpell(SpellCaster, "Target_SurvivalInstinct") == 1 and HasSpell(uuid, "Target_SurvivalInstinct") == 0  then
+                        AddSpell(uuid, "Target_SurvivalInstinct", 1, 1)
                     end
-                end,
+                end
             }
 
             for _, entry in pairs(Flags) do
@@ -583,6 +620,13 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
                 if IsTagged(SpellCaster, entry) == 1 and IsTagged(uuid, entry) == 0 then
                     -- Ext.Utils.Print(tostring(entry))
                     SetTag(uuid, entry)
+
+                    -- Add Necromancy of Thay Speak With Dead
+                    if (entry == "673cb6af-f12b-4d6e-faab-b81bf43c44ce") or (entry == "673cb6af-f12b-4d6e-abfa-1bb83cf4ce44") then
+                        if HasSpell(SpellCaster, "Target_GLO_DangerousBook_SpeakWd") == 1 and HasSpell(uuid, "Target_GLO_DangerousBook_SpeakWd") == 0 then
+                            AddSpell(uuid, "Target_GLO_DangerousBook_SpeakWd", 1, 1)
+                        end
+                    end
                 end
             end
 
@@ -652,6 +696,10 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
 end)
 
 -- It's testing time as I test all over the code
+
+-- Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _, _, _)
+--     Ext.Utils.Print("using spell", uuid, name)
+-- end)
 
 -- Ext.Osiris.RegisterListener("AddedTo", 3, "after", function (entity, char, _)
 --     if TimerActive and not (string.find(entity, "Underwear", 1, true)) and not (string.find(entity, "ARM", 1, true)) and not (string.find(entity, "WPN", 1, true)) then
