@@ -22,6 +22,9 @@ Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", function ()
         end
         Ext.Utils.Print("Character Creation Finished, Daisies Cleaned Up")
     end)
+
+    -- It's testing time as I test all over the code
+    -- local entity = Ext.Osiris.GetCharacter(GetHostCharacter())
 end)
 
 -- Remove Resculpt spell on saving game (to allow clean uninstalls)
