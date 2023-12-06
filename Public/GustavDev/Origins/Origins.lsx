@@ -20,7 +20,7 @@
                     <attribute id="IntroDialogUUID" type="guid" value="0985c3fd-2506-7d59-1146-bff949492a88"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Astarion"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a"/>
@@ -49,7 +49,7 @@
                     <attribute id="IntroDialogUUID" type="guid" value="c1794155-017b-d953-171f-93e3499dc545"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Laezel"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="bdf9b779-002c-4077-b377-8ea7c1faa795"/>
@@ -77,7 +77,7 @@
                     <attribute id="IntroDialogUUID" type="guid" value="6202aa53-97d7-86a6-4eac-d39d43e367d4"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Gale"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
@@ -106,7 +106,7 @@
                     <attribute id="IntroDialogUUID" type="guid" value="9e2f1b19-cfac-b601-a1a8-8b901679826a"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Shadowheart"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="45f4ac10-3c89-4fb2-b37d-f973bb9110c0"/>
@@ -136,7 +136,7 @@
                     <attribute id="IntroDialogUUID" type="guid" value="22e1f2cd-17ab-0c1b-e679-015faa6456dd"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Wyll"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows;BladeOfFrontiers"/>
                     <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
@@ -170,6 +170,7 @@
                     <attribute id="SubClassUUID" type="guid" value="d379fdae-b401-4731-8d50-277c73919ae3"/>
                     <attribute id="SubRaceUUID" type="guid" value="cbe10ab9-11a6-450e-844a-175bcca25de7"/>
                     <attribute id="UUID" type="guid" value="5af0f42c-9b32-4c3c-b108-46c44196081b"/>
+                    <attribute id="Unique" type="bool" value="false"/>
                     <attribute id="VoiceTableUUID" type="guid" value="2949c570-0a52-4cfd-8434-50925e18d44b"/>
                     <children>
                         <node id="AppearanceTags">
@@ -191,7 +192,7 @@
                     <attribute id="GlobalTemplate" type="guid" value="91b6b200-7d00-4d62-8dc9-99e8339dfa1a"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Jaheira"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="45f4ac10-3c89-4fb2-b37d-f973bb9110c0"/>
@@ -216,7 +217,7 @@
                     <attribute id="GlobalTemplate" type="guid" value="25721313-0c15-4935-8176-9f134385451b"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Minthara"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="4f5d1434-5175-4fa9-b7dc-ab24fba37929"/>
@@ -232,16 +233,16 @@
                 </node>
                 <node id="Origin">
                     <attribute id="AppearanceLocked" type="bool" value="false"/>
-                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="efcb0b57-5d5a-4a54-a7b3-a618829fe379"/>
-                    <attribute id="BodyShape" type="uint8" value="0"/>
+                    <attribute id="BodyShape" type="uint8" value="1"/>
                     <attribute id="BodyType" type="uint8" value="0"/>
                     <attribute id="ClassUUID" type="guid" value="36be18ba-23db-4dff-bfa6-ae105ce43144"/>
                     <attribute id="DisplayName" type="TranslatedString" handle="h5fa74864gae7bg4a5fg8dfega9af07431c42" version="1"/>
                     <attribute id="GlobalTemplate" type="guid" value="0de603c5-42e2-4811-9dad-f652de080eba"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Minsc"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
@@ -265,7 +266,7 @@
                     <attribute id="GlobalTemplate" type="guid" value="7628bc0e-52b8-42a7-856a-13a6fd413323"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Halsin"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a"/>
@@ -290,7 +291,7 @@
                     <attribute id="GlobalTemplate" type="guid" value="4a405fba-3000-4c63-97e5-a8001ebb883c"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Alfira"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="b6dccbed-30f3-424b-a181-c4540cf38197"/>

@@ -5,8 +5,8 @@
         <node id="root">
             <children>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
-                    <attribute id="AvailableInCharacterCreation" type="uint8" value="0"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="7e820dee-a8fc-43b2-8661-2b404454bade"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
                     <attribute id="BodyType" type="uint8" value="0"/>
@@ -14,6 +14,9 @@
                     <attribute id="Description" type="TranslatedString" handle="h33ce24a6gaaa4g4f9fg8d20g451e4e984fd2" version="3"/>
                     <attribute id="DisplayName" type="TranslatedString" handle="he92033f7ga93bg4e0bg97b9g9cf16e8cbc5c" version="2"/>
                     <attribute id="GlobalTemplate" type="guid" value="c7c13742-bacd-460a-8f65-f864fe41f255"/>
+                    <attribute id="LockBody" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Astarion"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="f4792c5f-8740-4f22-b77d-5df1e5753c46"/>
@@ -28,8 +31,8 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
-                    <attribute id="AvailableInCharacterCreation" type="uint8" value="0"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="1252a86e-9baa-4ccb-b8ce-2378ae006f0b"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
                     <attribute id="BodyType" type="uint8" value="1"/>
@@ -38,6 +41,9 @@
                     <attribute id="Description" type="TranslatedString" handle="h4dfcb306ga31fg4925g967eg304eb0ad280b" version="2"/>
                     <attribute id="DisplayName" type="TranslatedString" handle="had7a1b84g7792g45ebgab77g050775531783" version="1"/>
                     <attribute id="GlobalTemplate" type="guid" value="58a69333-40bf-8358-1d17-fff240d7fb12"/>
+                    <attribute id="LockBody" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Laezel"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="bdf9b779-002c-4077-b377-8ea7c1faa795"/>
@@ -52,8 +58,8 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
-                    <attribute id="AvailableInCharacterCreation" type="uint8" value="0"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="8807a6c6-d8cf-494b-aec2-cc01d7517a56"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
                     <attribute id="BodyType" type="uint8" value="0"/>
@@ -61,6 +67,9 @@
                     <attribute id="Description" type="TranslatedString" handle="h0d7720d5g2904g4cbcgad55gd88f3ecadfce" version="2"/>
                     <attribute id="DisplayName" type="TranslatedString" handle="hb9748820g473bg455cg85b9ge05569d4518c" version="1"/>
                     <attribute id="GlobalTemplate" type="guid" value="ad9af97d-75da-406a-ae13-7071c563f604"/>
+                    <attribute id="LockBody" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Gale"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
@@ -75,8 +84,8 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
-                    <attribute id="AvailableInCharacterCreation" type="uint8" value="0"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="ac38525a-222b-4280-9c8e-60d5533b675c"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
                     <attribute id="BodyType" type="uint8" value="1"/>
@@ -86,7 +95,9 @@
                     <attribute id="DisplayName" type="TranslatedString" handle="hf046d114g7291g4115gb497g86b988ebadac" version="1"/>
                     <attribute id="GlobalTemplate" type="guid" value="3ed74f06-3c60-42dc-83f6-f034cb47c679"/>
                     <attribute id="GodUUID" type="guid" value="2eb3557f-7ada-41d6-a892-e02def72ef77"/>
+                    <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Shadowheart"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="45f4ac10-3c89-4fb2-b37d-f973bb9110c0"/>
@@ -102,8 +113,8 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
-                    <attribute id="AvailableInCharacterCreation" type="uint8" value="0"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="efcb0b57-5d5a-4a54-a7b3-a618829fe379"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
                     <attribute id="BodyType" type="uint8" value="0"/>
@@ -112,6 +123,9 @@
                     <attribute id="Description" type="TranslatedString" handle="h6cbf223fg52d0g46adg932dgc7a08a61b5f0" version="2"/>
                     <attribute id="DisplayName" type="TranslatedString" handle="h55526c56g344bg4b7cg9a6cg88aac8fd3ed7" version="1"/>
                     <attribute id="GlobalTemplate" type="guid" value="c774d764-4a17-48dc-b470-32ace9ce447d"/>
+                    <attribute id="LockBody" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Wyll"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows;BladeOfFrontiers"/>
                     <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
@@ -155,7 +169,7 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
                     <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="1252a86e-9baa-4ccb-b8ce-2378ae006f0b"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
@@ -163,6 +177,9 @@
                     <attribute id="ClassUUID" type="guid" value="457d0a6e-9da8-4f95-a225-18382f0e94b5"/>
                     <attribute id="DisplayName" type="TranslatedString" handle="ha12e8e69gd30ag423fgb57cgb8af04c72ede" version="1"/>
                     <attribute id="GlobalTemplate" type="guid" value="91b6b200-7d00-4d62-8dc9-99e8339dfa1a"/>
+                    <attribute id="LockBody" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Jaheira"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="45f4ac10-3c89-4fb2-b37d-f973bb9110c0"/>
@@ -177,7 +194,7 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
                     <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="7e820dee-a8fc-43b2-8661-2b404454bade"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
@@ -187,7 +204,7 @@
                     <attribute id="GlobalTemplate" type="guid" value="25721313-0c15-4935-8176-9f134385451b"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Minthara"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="4f5d1434-5175-4fa9-b7dc-ab24fba37929"/>
@@ -202,7 +219,7 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
                     <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="efcb0b57-5d5a-4a54-a7b3-a618829fe379"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
@@ -212,7 +229,7 @@
                     <attribute id="GlobalTemplate" type="guid" value="0de603c5-42e2-4811-9dad-f652de080eba"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Name" type="FixedString" value="Minsc"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
@@ -226,7 +243,7 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
                     <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="5b1e726f-52bf-4e93-a798-9f93c067ee7f"/>
                     <attribute id="BodyShape" type="uint8" value="1"/>
@@ -237,7 +254,7 @@
                     <attribute id="Name" type="FixedString" value="Halsin"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a"/>
                     <attribute id="SubClassUUID" type="guid" value="3eab0689-e51b-4634-a690-0375d3cb2716"/>
@@ -251,7 +268,7 @@
                     </children>
                 </node>
                 <node id="Origin">
-                    <attribute id="AppearanceLocked" type="bool" value="true"/>
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
                     <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
                     <attribute id="BackgroundUUID" type="guid" value="229775c9-3044-4779-a3bb-532c39238e03"/>
                     <attribute id="BodyShape" type="uint8" value="0"/>
@@ -262,7 +279,7 @@
                     <attribute id="Name" type="FixedString" value="Alfira"/>
                     <attribute id="LockBody" type="bool" value="true"/>
                     <attribute id="LockClass" type="bool" value="false"/>
-                    <attribute id="LockRace" type="bool" value="true"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
                     <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
                     <attribute id="RaceUUID" type="guid" value="b6dccbed-30f3-424b-a181-c4540cf38197"/>
                     <attribute id="SubClassUUID" type="guid" value="d21368ac-c776-465c-9dcf-6123dd52734f"/>
