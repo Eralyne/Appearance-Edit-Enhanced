@@ -27,6 +27,7 @@ Constants.PersistedTemplateKeys = {
     "Icon",
     "GeneratePortrait",
     "Race",
+    "Id" -- Readable
 }
 
 Constants.PersistedOriginTemplateKeys = {
@@ -247,7 +248,6 @@ Constants.CharacterOrigins = {
     "S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679"
 }
 
--- TODO: Don't do this?
 Constants.CharacterOriginsUUIDs = {
     "2c76687d-93a2-477b-8b18-8a14b549304c",
     "0de603c5-42e2-4811-9dad-f652de080eba",
@@ -271,13 +271,67 @@ Constants.FemaleSecretOrigins = {
     "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
 }
 
+Constants.GenitalTags = {
+    "d27831df-2891-42e4-b615-ae555404918b",
+    "a0738fdf-ca0c-446f-a11d-6211ecac3291"
+}
+
+Constants.ReallyTagsConvertion = {
+    ["e8193d83-f2bc-4e21-8573-b4e158cc9363"] = "7e97c590-911f-422a-bdb6-068c137eb2c8", -- ["REALLY_AARAKOCRA"]
+    ["41c6cdc9-aff5-46ae-afc4-aa0ccd9cd201"] = "2fddf7dd-f79b-4998-882c-d7257badbfe6", -- ["REALLY_AASIMAR"]
+    ["c3fd1fc3-2edf-4d17-935d-44ab92406df1"] = "6591a20a-12de-46ff-bf82-b866cd97bb9a", -- ["REALLY_ASMODEUSTIEFLING"]
+    ["92aae5aa-4595-4f1c-96d2-9e2499d35c6f"] = "1029b3e3-3ff0-4d73-b4ed-79b622cad4f9", -- ["REALLY_BESTIAL"]
+    ["2bbc3217-3d8c-46e6-b599-a0f1c9063f9a"] = "17d29357-beba-4096-accc-c28bdea88fda", -- ["REALLY_DEEPGNOME"]
+    ["ba107054-6d0a-45de-93bc-06d72d4feeb3"] = "8fac3253-331c-4b9f-95fb-e2196fd1bc8d", -- ["REALLY_DISPLACER_BEAST"]
+    ["02e5e9ed-b6b2-4524-99cd-cb2bc84c754a"] = "39783f17-8484-46a6-aa3b-f3d51122e5f3", -- ["REALLY_DRAGONBORN"]
+    ["a672ac1d-d088-451a-9537-3da4bf74466c"] = "676e854b-d74b-44f3-8363-3ef27164a54d", -- ["REALLY_DROWELF"]
+    ["4fa13243-199d-4c9a-b455-d844276a98f5"] = "3dbe23e0-2c9f-4a81-b586-ec6e50f720e1", -- ["REALLY_DROWHALFELF"]
+    ["78adf3cd-4741-47a8-94f6-f3d322432591"] = "45b007f7-f4f6-46e2-9480-395a49b87ef3", -- ["REALLY_DUERGARDWARF"]
+    ["486a2562-31ae-437b-bf63-30393e18cbdd"] = "ad129444-0f41-4114-9ee5-2b9902d7ca8d", -- ["REALLY_DWARF"]
+    ["351f4e42-1217-4c06-b47a-443dcf69b111"] = "772b1dc6-14be-417f-afa3-c6cf364f45b4", -- ["REALLY_ELF"]
+    ["45759dc2-4d7a-4853-af73-50cfd412409b"] = "9deae354-0108-40b4-a7db-6eb23fba050f", -- ["REALLY_FIRBOLG"]
+    ["09518377-4ea1-4ce2-b8e8-61477c26ebdd"] = "b0401c02-70b3-47f5-998f-8d440ad6954f", -- ["REALLY_FORESTGNOME"]
+    ["48d7b679-dffd-4f68-a306-adac19de8acf"] = "aa68eccb-7875-436f-881e-c3775eee37f6", -- ["REALLY_GENASI"]
+    ["677ffa76-2562-4217-873e-2253d4720ba4"] = "e49c027c-6ec6-4158-9afb-8b59236d10fd", -- ["REALLY_GITHYANKI"]
+    ["1f0551f3-d769-47a9-b02b-5d3a8c51978c"] = "42483542-7915-4de5-a7d9-ac0d15fe301c", -- ["REALLY_GNOME"]
+    ["34317158-8e6e-45a2-bd1e-6604d82fdda2"] = "277f9609-ad0c-4883-b56d-0850904e88df", -- ["REALLY_HALFELF"]
+    ["b99b6a5d-8445-44e4-ac58-81b2ee88aab1"] = "2b40a033-7a5c-47e9-92f0-7de9b5cd3a42", -- ["REALLY_HALFLING"]
+    ["3311a9a9-cdbc-4b05-9bf6-e02ba1fc72a3"] = "ab3eff19-d094-4102-88bd-d097b6b6e4f0", -- ["REALLY_HALFORC"]
+    ["492c3200-1226-4114-bad1-f6b1ba737f3d"] = "78884c5f-9504-41af-912d-ce212df0ebea", -- ["REALLY_HIGHELF"]
+    ["52b71dea-9d4e-402d-9700-fb9c360a44c9"] = "bb7c731c-7af7-4c2d-b3d7-b4e8bd86a244", -- ["REALLY_HIGHHALFELF"]
+    ["534098fa-601d-4f6e-8c4e-b3a8d4b1f141"] = "9a92ac6d-b7cc-4ccb-8965-074c6b36a342", -- ["REALLY_HILLDWARF"]
+    ["69fd1443-7686-4ca9-9516-72ec0b9d94d7"] = "8e288154-e7ca-4277-b2df-e61639b1cce8", -- ["REALLY_HUMAN"]
+    ["b7215e01-b86a-4ce1-96e0-4f035afaaeae"] = "ec90a39d-ce0e-4ae1-b74d-0906dfd9a1d2", -- ["REALLY_KENKU"]
+    ["57a00605-9e74-477c-bd9d-53c721e25e56"] = "da1d4f47-8583-49a1-b262-d77d361b2e09", -- ["REALLY_LIGHTFOOTHALFLING"]
+    ["615d115d-6d1d-477c-8b2c-d8e91b8cfe7d"] = "ef8444e2-a240-4cc1-9f57-73db6d99bc96", -- ["REALLY_LIZARDFOLK"]
+    ["ef9c5b74-56a8-48cc-b0b9-169ee16bf026"] = "c71eb8de-74e3-4d70-9826-22da7e2dc607", -- ["REALLY_LOLTHDROWELF"]
+    ["ec5bea6b-26f1-4917-919c-375f67ac13d1"] = "c70e1dc2-72d4-44f9-83fd-c63d247edd9b", -- ["REALLY_MEPHISTOPHELESTIEFLING"]
+    ["1dc20a7a-00e7-4126-80ad-aa1152a2136c"] = "18659b46-73ae-49d2-85a8-7e6cc43ce94f", -- ["REALLY_MOUNTAINDWARF"]
+    ["bad00ba2-8a49-450c-8387-af47681717f1"] = "4cb02915-7ad7-4141-907e-93253c6a8644", -- ["REALLY_PLANAR"]
+    ["d2f86ec3-c41f-47e1-8acd-984872a4d7d5"] = "987a41e3-2482-4c74-8c30-f3843cfdb7f3", -- ["REALLY_RARE"]
+    ["664cc044-a0ea-43a1-b21f-d8cad7721102"] = "df697d73-5469-405a-aa95-6e1e720c5ee6", -- ["REALLY_ROCKGNOME"]
+    ["6e913b6e-58b1-41bf-8751-89250dd17bff"] = "d2d60a81-688e-4d3d-ba56-3e467cae37fc", -- ["REALLY_SELDARINEDROWELF"]
+    ["8d545fa1-8416-493f-8325-7d112bceced8"] = "058df86a-97b6-4dc4-a246-a1db65ff3c0f", -- ["REALLY_STOUTHALFLING"]
+    ["b83aa083-9544-454e-baef-2cb28f9c151b"] = "bafc25f8-20b0-4693-a0fe-73967befcf05", -- ["REALLY_TABAXI"]
+    ["aaef5d43-c6f3-434d-b11e-c763290dbe0c"] = "7bf7207f-7406-49c0-b501-eaaa2bb4efd7", -- ["REALLY_TIEFLING"]
+    ["be68063a-83d0-4e3b-8d03-8127888af222"] = "7839884d-892a-4d60-95cc-b073420d8474", -- ["REALLY_TORTLE"]
+    ["c622d782-f676-444a-bb31-9657b0f1415b"] = "2a7e679e-2567-47f7-9645-550471cffcf7", -- ["REALLY_TRITON"]
+    ["60f6b464-752f-4970-a855-f729565b5e07"] = "2d0a73b9-f113-4d35-bdee-a31ab9163d74", -- ["REALLY_UNDERDARK"]
+    ["54a4726b-9399-4e8e-825e-42c60273939e"] = "e30b5b4d-2ceb-4791-914e-b6c6c122f059", -- ["REALLY_WARFORGED"]
+    ["889e0db5-d03e-4b63-86d7-13418f69729f"] = "b12e8dff-c1f0-4e9c-9ec0-1cafd22bb637", -- ["REALLY_WOODELF"]
+    ["5ffb703c-3ef4-493b-966d-749bc038f6bd"] = "8ac1b27c-c5c4-4a2c-95dd-256e4349e483", -- ["REALLY_WOODHALFELF"]
+    ["1ff4bf9e-a8dd-4627-8142-f60b3aa7123e"] = "3d80e0d5-0e28-4363-b153-c1a1076d36d4", -- ["REALLY_YUANTIPUREBLOOD"]
+    ["ab677895-e08a-479f-a043-eac2d8447188"] = "3a5efd84-5925-4a75-83ee-4f336b56f716", -- ["REALLY_ZARIELTIEFLING"]
+
+}
+
 Constants.ReallyTags = {
     "7e97c590-911f-422a-bdb6-068c137eb2c8", -- ["REALLY_AARAKOCRA"]
     "2fddf7dd-f79b-4998-882c-d7257badbfe6", -- ["REALLY_AASIMAR"]
     -- "0c8221b4-43c8-4c9e-aa00-1832f4d9bcb9", -- ["REALLY_ALFIRA"]
     "6591a20a-12de-46ff-bf82-b866cd97bb9a", -- ["REALLY_ASMODEUSTIEFLING"]
     -- "ffd08582-7396-4cac-bcd4-8f9cd0fd8ef3", -- ["REALLY_ASTARION"]
-    -- "1029b3e3-3ff0-4d73-b4ed-79b622cad4f9", -- ["REALLY_BESTIAL"]
+    "1029b3e3-3ff0-4d73-b4ed-79b622cad4f9", -- ["REALLY_BESTIAL"]
     -- "cd611d7d-b67d-42b4-a75c-a0c6091ef8a2", -- ["REALLY_DARK_URGE"]
     "17d29357-beba-4096-accc-c28bdea88fda", -- ["REALLY_DEEPGNOME"]
     "8fac3253-331c-4b9f-95fb-e2196fd1bc8d", -- ["REALLY_DISPLACER_BEAST"]
@@ -314,7 +368,7 @@ Constants.ReallyTags = {
     -- "3e84e1cd-2193-4f9f-80b4-c2ededefaea6", -- ["REALLY_MINTHARA"]
     "18659b46-73ae-49d2-85a8-7e6cc43ce94f", -- ["REALLY_MOUNTAINDWARF"]
     "4cb02915-7ad7-4141-907e-93253c6a8644", -- ["REALLY_PLANAR"]
-    -- "987a41e3-2482-4c74-8c30-f3843cfdb7f3", -- ["REALLY_RARE"]
+    "987a41e3-2482-4c74-8c30-f3843cfdb7f3", -- ["REALLY_RARE"]
     "df697d73-5469-405a-aa95-6e1e720c5ee6", -- ["REALLY_ROCKGNOME"]
     "d2d60a81-688e-4d3d-ba56-3e467cae37fc", -- ["REALLY_SELDARINEDROWELF"]
     -- "642d2aee-e3df-47e3-9f47-bbcd441bb9e0", -- ["REALLY_SHADOWHEART"]
@@ -323,7 +377,7 @@ Constants.ReallyTags = {
     "7bf7207f-7406-49c0-b501-eaaa2bb4efd7", -- ["REALLY_TIEFLING"]
     "7839884d-892a-4d60-95cc-b073420d8474", -- ["REALLY_TORTLE"]
     "2a7e679e-2567-47f7-9645-550471cffcf7", -- ["REALLY_TRITON"]
-    -- "2d0a73b9-f113-4d35-bdee-a31ab9163d74", -- ["REALLY_UNDERDARK"]
+    "2d0a73b9-f113-4d35-bdee-a31ab9163d74", -- ["REALLY_UNDERDARK"]
     -- "2cff7db0-ae50-4267-82ea-84e961d3e3fa", -- ["REALLY_US"]
     "e30b5b4d-2ceb-4791-914e-b6c6c122f059", -- ["REALLY_WARFORGED"]
     "b12e8dff-c1f0-4e9c-9ec0-1cafd22bb637", -- ["REALLY_WOODELF"]

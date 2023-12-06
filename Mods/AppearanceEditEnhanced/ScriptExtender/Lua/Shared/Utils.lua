@@ -134,6 +134,7 @@ local PermittedCopyObjects = Utils.Set(Constants.PermittedCopyObjects)
 local MaleSecretOrigins = Utils.Set(Constants.MaleSecretOrigins)
 local FemaleSecretOrigins = Utils.Set(Constants.FemaleSecretOrigins)
 local ReallyTags = Utils.Set(Constants.ReallyTags)
+local GenitalTags = Utils.Set(Constants.GenitalTags)
 
 
 -------------------------------------------------------------------------------------------------
@@ -343,11 +344,13 @@ function Utils.FindSpellIndexOnHotbar(character, spell)
     local CharacterHotbar = checkHotBarExists(character)
 
     if (CharacterHotbar) then
-        for _, bar in pairs(CharacterHotbar) do
-            if (bar and PermittedCopyObjects[getmetatable(bar.Elements)]) then
+        local HotBar = Ext.Entity.Get(character).HotbarContainer.Containers.DefaultBarContainer
+
+        for _, bar in pairs(HotBar) do
+            if (bar) then
                 for _, slot in pairs(bar.Elements) do
                     if (slot and slot["SpellId"] and slot["SpellId"]["Prototype"] == spell) then
-                        return bar["Index"], slot["Slot"]
+                        return bar["Index"], bar["field_1"], slot["Slot"]
                     end
                 end
             end
@@ -360,8 +363,10 @@ end
 function Utils.GetHotbarSlotFromIndex(character, barIndex, slotIndex)
     local CharacterHotbar = checkHotBarExists(character)
     if (CharacterHotbar) then
-        for _, bar in pairs(CharacterHotbar) do
-            if (bar and bar["Index"] == barIndex and PermittedCopyObjects[getmetatable(bar.Elements)]) then
+        local HotBar = Ext.Entity.Get(character).HotbarContainer.Containers.DefaultBarContainer
+
+        for _, bar in pairs(HotBar) do
+            if (bar and bar["Index"] == barIndex) then
                 for _, slot in pairs(bar.Elements) do
                     if (slot and slot["Slot"] == slotIndex) then
                         return slot["Slot"], slot
@@ -486,11 +491,12 @@ function Utils.MoveSpellToSlot(character)
 
     if (persistantChar) then
         local BarIndex = persistantChar["BarIndex"]
+        local BarRemoved = persistantChar["BarRemoved"]
         local NewSlot = persistantChar["Slot"]
 
         local CharacterHotbar = checkHotBarExists(character)
 
-        if (CharacterHotbar and BarIndex and NewSlot) then
+        if (CharacterHotbar) then
             local HotBar = Ext.Entity.Get(character).HotbarContainer.Containers.DefaultBarContainer
 
             local Removed = false
@@ -507,21 +513,21 @@ function Utils.MoveSpellToSlot(character)
                 end
             end
 
-            local Moved = false
+            -- local Moved = false
 
-            if (Removed) then
+            if (Removed and BarIndex and NewSlot) then
                 for _, bar in pairs(HotBar) do
                     if (bar) then
-                        if (BarIndex == bar["Index"]) then
+                        if (BarIndex == bar["Index"] and (BarRemoved ~= 1)) then
                             -- Utils.Debug("Spell moved")
-                            Moved = true
+                            -- Moved = true
                             bar.Elements[#bar.Elements + 1] = NewSlot
                         end
                     end
                 end
             end
 
-            if (Moved) then
+            if (Removed) then
                 PersistentVars["SpellOwners"][UUIDChar] = {}
                 Ext.Entity.Get(character):Replicate("HotbarContainer")
             end
@@ -603,8 +609,8 @@ function Utils.ShiftEquipmentVisual(character, reverse)
         end
 
         Entity:Replicate("ServerCharacter")
-    elseif (not PersistentVars["OriginalTemplates"][UUIDChar]) then
-        Utils.Warn("Your persistant vars are GONE. If you have a resculpted character, resculpt again or else you will have ISSUES.")
+    elseif (PersistentVars["OriginalTemplates"] and not PersistentVars["OriginalTemplates"][UUIDChar]) then
+        -- Utils.Warn("Your persistant vars are GONE. If you have a resculpted character, resculpt again or else you will have ISSUES.")
     end
 end
 
@@ -625,7 +631,22 @@ end
 function Utils.CopyAppearanceVisuals(uuid)
     local Entity = Ext.Entity.Get(uuid)
 
+    if (Entity.GameObjectVisual.TemplateId and string.len(Entity.GameObjectVisual.TemplateId) == 0) then
+        Entity.GameObjectVisual.TemplateId = Entity.GameObjectVisual.RootTemplateId
+    end
+
+    if (Utils.Size(Entity.GameObjectVisual.VisualData.Elements) == 0) then
+        Entity.GameObjectVisual.VisualData.Elements = Constants.DefaultElements
+    end
+
+    if (Utils.Size(Entity.GameObjectVisual.VisualData.Elements) == 0) then
+        Entity.GameObjectVisual.VisualData.AdditionalChoices = Constants.DefaultAdditionalChoices
+    end
+
     Utils.CloneProxy(Entity.GameObjectVisual.VisualData, Entity.CharacterCreationAppearance);
+
+    Utils.CloneProxy(Entity.GameObjectVisual.VisualData.Visuals, Entity.CharacterCreationAppearance.Visuals);
+    Utils.CloneProxy(Entity.GameObjectVisual.VisualData.Elements, Entity.CharacterCreationAppearance.Elements);
 
     if (Entity.GameObjectVisual.Type ~= 2) then
         Entity.GameObjectVisual.Type = 2
@@ -637,20 +658,44 @@ end
 function Utils.FixREALLYTags(char, secondaryChar)
     local Entity = Ext.Entity.Get(char)
     local SecondaryEntity = Ext.Entity.Get(secondaryChar)
-    local ReallyTag
+    local NewReallyTags = {}
 
     for _, val in pairs(SecondaryEntity.Tag.Tags) do
-        if (ReallyTags[val]) then
-            ReallyTag = val
-            break
+        if (Constants.ReallyTagsConvertion[val]) then
+            table.insert(NewReallyTags, Constants.ReallyTagsConvertion[val])
         end
     end
 
-    if (ReallyTag) then
+    if (Utils.Size(NewReallyTags) > 0) then
+        -- Tag
         for _, val in pairs(Entity.Tag.Tags) do
             if (ReallyTags[val]) then
-                val = ReallyTag
-                Entity:Replicate("Tag")
+                Osi.ClearTag(char, val)
+            end
+        end
+
+        for _, val in pairs(NewReallyTags) do
+            Osi.SetTag(char, val)
+        end
+    end
+end
+
+function Utils.FixGenitalTags(char, secondaryChar)
+    local Entity = Ext.Entity.Get(char)
+    local SecondaryEntity = Ext.Entity.Get(secondaryChar)
+    local GenitalTag
+
+    for _, val in pairs(SecondaryEntity.Tag.Tags) do
+        if (GenitalTags[val]) then
+            GenitalTag = val
+        end
+    end
+
+    if (GenitalTag) then
+        for _, val in pairs(Entity.Tag.Tags) do
+            if (GenitalTags[val]) then
+                Osi.ClearTag(char, val)
+                Osi.SetTag(char, GenitalTag)
                 break
             end
         end
@@ -704,7 +749,7 @@ end
 function Utils.PersistHotBarSlot(character)
     local UUIDChar = Utils.GetGUID(character)
 
-    local barIndex, slotIndex = Utils.FindSpellIndexOnHotbar(UUIDChar, Constants.CustomSpells["SpellsContainer"])
+    local barIndex, barRemoved, slotIndex = Utils.FindSpellIndexOnHotbar(UUIDChar, Constants.CustomSpells["SpellsContainer"])
 
     if (barIndex and slotIndex) then
         local _, slot = Utils.GetHotbarSlotFromIndex(UUIDChar, barIndex, slotIndex)
@@ -728,10 +773,19 @@ function Utils.PersistHotBarSlot(character)
 
             PersistentVars["SpellOwners"][UUIDChar] = {
                 ["BarIndex"] = barIndex,
+                ["BarRemoved"] = barRemoved,
                 ["SlotIndex"] = slotIndex,
                 ["Slot"] = convertedSlot,
             }
         end
+    else
+        PersistentVars["SpellOwners"][UUIDChar] = {
+            ["Slot"] = {
+                ["SpellId"] = {
+                    ["Prototype"] = Constants.CustomSpells["SpellsContainer"]
+                }
+            }
+        }
     end
 end
 

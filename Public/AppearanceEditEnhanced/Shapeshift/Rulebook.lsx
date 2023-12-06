@@ -18,7 +18,7 @@
                     <attribute id="RemoveOldTags" type="bool" value="false"/>
                     <attribute id="RetainDisplayName" type="bool" value="true"/>
                     <attribute id="RuleName" type="LSString" value="AETransform"/>
-                    <attribute id="ApplySpellsFromTemplate" type="bool" value="false"/>
+                    <attribute id="ApplySpellsFromTemplate" type="bool" value="true"/>
                     <attribute id="UnarmedAbilityFromTemplate" type="bool" value="true"/>
                     <attribute id="UseShapeshiftIdentity" type="bool" value="true"/>
                     <attribute id="UUID" type="guid" value="6f45d3b8-fa22-4bae-919c-9c2757bff470"/>

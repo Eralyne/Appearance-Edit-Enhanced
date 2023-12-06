@@ -41,7 +41,6 @@ local function GiveSpellToCharacter(character)
         if (PersistantChar and PersistantChar["Slot"]) then
             -- Utils.Debug("Adding spells to " .. UUIDChar)
             Osi.AddSpell(UUIDChar, Spell, 0, 1)
-            -- Utils.InsertIntoHotbarSlot(UUIDChar, PersistantChar)
         else
             Osi.AddSpell(UUIDChar, Spell, 1, 1)
 
@@ -116,6 +115,4 @@ end)
 Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", function(character)
     Utils.Info(character .. " left the party, removing spells")
     RemoveSpellFromCharacter(character, true)
-
-    
 end)

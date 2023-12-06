@@ -6,7 +6,6 @@ Ext.Require("Shared/Patches.lua")
 Ext.Require("Shared/Cleanup.lua")
 Ext.Require("AppearanceEditEnhanced/Main.lua")
 Ext.Require("AppearanceEditEnhanced/EntitySubscriptions.lua")
-Ext.Require("AppearanceEditEnhanced/Tick.lua")
 
 local function OnSessionLoaded()
     local ModInfo = Ext.Mod.GetMod(Constants.ModUUID)["Info"]

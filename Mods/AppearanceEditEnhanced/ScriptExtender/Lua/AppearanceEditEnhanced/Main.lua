@@ -13,8 +13,8 @@ local function doOriginOperations(uuid)
     -- Assign character creation entity
     local originEntity = Ext.Entity.Get(uuid).CharacterCreationAppearance
     if (Constants.OriginCharacterCreationAppearances[uuid] and (originEntity.EyeColor == Constants.DefaultUUIDs["NullTemplate"] or originEntity.SkinColor == Constants.DefaultUUIDs["NullTemplate"])) then
-        -- Temp
-        Utils.CloneProxy(originEntity, Constants.OriginCharacterCreationAppearances[uuid])
+        Utils.TempClone(originEntity, Constants.OriginCharacterCreationAppearances[uuid])
+        Ext.Entity.Get(uuid):Replicate("CharacterCreationAppearance")
     end
 end
 
@@ -153,6 +153,8 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
 
         Osi.Transform(SpellCaster, uuid, "6f45d3b8-fa22-4bae-919c-9c2757bff470")
         Utils.FixREALLYTags(SpellCaster, uuid)
+        -- Can't clear Genital tag properly :()
+        -- Utils.FixGenitalTags(SpellCaster, uuid)
 
         -- Utils.Debug("CopiedTav: " .. uuid)
 
@@ -184,13 +186,6 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         oldEntity.ServerCharacter.Character.BaseVisual = newEntity.ServerCharacter.Character.BaseVisual
         oldEntity:Replicate("ServerCharacter")
 
-        -- Copy custom looks into GameObjectVisual
-        if (Utils.Size(oldEntity.GameObjectVisual.VisualData.Elements) == 0) then
-            oldEntity.GameObjectVisual.VisualData.Elements = Constants.DefaultElements
-        end
-        if (Utils.Size(oldEntity.GameObjectVisual.VisualData.Elements) == 0) then
-            oldEntity.GameObjectVisual.VisualData.AdditionalChoices = Constants.DefaultAdditionalChoices
-        end
         Utils.CopyAppearanceVisuals(SpellCaster)
 
         -- Remove
