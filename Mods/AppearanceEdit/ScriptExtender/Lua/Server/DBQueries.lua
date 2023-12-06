@@ -4594,7 +4594,6 @@ local DBQueries = {
 "DB_LOW_TadpoleTransport_Steelwatch(CHARACTER)",
 "DB_LOW_TadpoleTransport_TadpoleItem(ITEM, INTEGER)",
 "DB_LOW_TadpoleTransport_TrespassingArea(TRIGGER)",
-"DB_LOW_ThrowAtHag_ThrowId(INTEGER)",
 "DB_LOW_TressymTrade_InitialSetup(INTEGER)",
 "DB_LOW_TressymTrade_TradedItem(ITEM)",
 "DB_LOW_TressymTrade_Tressym_CurrentLoot(GUIDSTRING)",
@@ -7302,7 +7301,7 @@ local DBQueries = {
 "DB_WorldGossipTrigger(TRIGGER, INTEGER, STRING)",
 "DB_WorldGossip_RegionTrigger(TRIGGER, FLAG)",
 "DB_YennaDismissedFromCamp(INTEGER)",
-"DB_ZZZ_LevelLoaded(STRING)"
+"DB_ZZZ_LevelLoaded(STRING)",
 }
 
 return DBQueries
