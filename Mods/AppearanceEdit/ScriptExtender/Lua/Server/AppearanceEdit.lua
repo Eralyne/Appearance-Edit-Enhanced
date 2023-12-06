@@ -114,6 +114,14 @@ local function dump(o)
    end
 end
 
+local function try_get_db(query, arity)
+    local db = Osi[query]
+    if db and db.Get then
+        return db:Get(table.unpack({}, 1, arity))
+    end
+end
+
+
 -- local function wait(milliseconds) 
 --     local start = Ext.Utils.MonotonicTime() 
 --     repeat until Ext.Utils.MonotonicTime() > start + milliseconds
@@ -290,24 +298,28 @@ local function RepairChangedDbs()
 
         local DBTables = {}
 
-        for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
-            table.insert(DBTables, entry)
-        end
+        local success, _ = pcall(try_get_db, QueryShort, ParamCount)
 
-        local tbEquals = equals(item, DBTables, false)
-
-        -- Ext.Utils.Print(query, " equals is ", tbEquals)
-
-        if (not tbEquals) or string.find(QueryShort, "DB_Quest", 1, true) then
-            for _, entry in ipairs(DBTables) do
-                -- Ext.Utils.Print("Deleting: ", dump(entry))
-                Osi[QueryShort](table.unpack(entry))
+        if success then
+            for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
+                table.insert(DBTables, entry)
             end
-            -- Ext.Utils.Print(query, " is being re-inserted", dump())
-            for _, entry in ipairs(item) do
-                -- Ext.Utils.Print("Reinserting: ", dump(entry))
-                
-                Osi[QueryShort](table.unpack(entry))
+
+            local tbEquals = equals(item, DBTables, false)
+
+            -- Ext.Utils.Print(query, " equals is ", tbEquals)
+
+            if (not tbEquals) or string.find(QueryShort, "DB_Quest", 1, true) then
+                for _, entry in ipairs(DBTables) do
+                    -- Ext.Utils.Print("Deleting: ", dump(entry))
+                    Osi[QueryShort](table.unpack(entry))
+                end
+                -- Ext.Utils.Print(query, " is being re-inserted", dump())
+                for _, entry in ipairs(item) do
+                    -- Ext.Utils.Print("Reinserting: ", dump(entry))
+                    
+                    Osi[QueryShort](table.unpack(entry))
+                end
             end
         end
 
@@ -319,16 +331,11 @@ end
 Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", function ()
     SaveLoaded = true
 
-    local DBLocations = Osi["DB_GLO_LevelSwap_Location"]:Get(nil, nil, nil, nil, nil, nil, nil)
-    local DBLocationsSize = size(DBLocations)
-
     -- Fix travel issues
-    if (DBLocationsSize < size(LevelSwapFix)) then
-        for _, entry in pairs(LevelSwapFix) do
-            Osi["DB_GLO_LevelSwap_Location"](table.unpack(entry))
-        end
-        Ext.Utils.Print("LevelSwap Locations repaired")
+    for _, entry in pairs(LevelSwapFix) do
+        Osi["DB_GLO_LevelSwap_Location"](table.unpack(entry))
     end
+    Ext.Utils.Print("LevelSwap Locations repaired")
 end)
 
 -- Give players Resculpt spell on sneak
@@ -359,7 +366,7 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
                 -- Kill all the left over characters
                 if (not RemovedPlayers[entry[2]]) then
                     SetImmortal(entry[2], 0)
-                    Die(entry[2], 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 0)
+                    Die(entry[2], 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
                     Osi["DB_GLO_PartyMembers_Kicked"](entry[2])
                     Ext.Utils.Print("Brutally murdering ", entry[2])
                     table.insert(RemovedPlayers, entry[2])
@@ -368,6 +375,13 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
 
                 -- Clear left over approval ratings
                 Osi["DB_ApprovalRating"]:Delete(table.unpack(entry))
+            end 
+        end
+
+        for _, entry in pairs(Osi["DB_Avatars"]:Get(nil)) do
+            if (not Players[entry[1]] and not CharacterOrigins[entry[1]]) then
+                -- Clear left over approval ratings
+                Osi["DB_Avatars"]:Delete(table.unpack(entry))
             end 
         end
      end
@@ -385,6 +399,8 @@ Ext.Osiris.RegisterListener("CharacterCreationFinished", 0, "before", function (
     if SaveLoaded then
         CharacterCreated = true
 
+        TimerLaunch("APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED", 1500)
+
         -- Remove Daisies
         for _, entry in pairs(Osi["DB_GLO_DaisyAwaitsAvatar"]:Get(nil, nil)) do
             SetOnStage(entry[1], 0)
@@ -399,6 +415,7 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
     -- Ext.Utils.Print("UsingSpell", uuid, name)
     if name == 'Shout_Open_Creation' then
         SpellCaster = uuid
+        NewTav = nil
         Ext.Utils.Print(SpellCaster .. " casting spell")
 
         -- for _, entry in pairs(Flags) do
@@ -418,7 +435,9 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
             local QueryShort = t[1]
             local ParamCount = select(2, string.gsub(t[2], ",", "")) + 1
 
-            if not IgnoreDBs[QueryShort] then
+            local success, _ = pcall(try_get_db, QueryShort, ParamCount)
+
+            if not IgnoreDBs[QueryShort] and success then
                 local UUIDIncluded = false
                 for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
                     if not UUIDIncluded then
@@ -444,7 +463,13 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
 end)
 
 Ext.Osiris.RegisterListener("EntityEvent", 2, "after", function (entity, event)
-    if event == "APPEARANCE_EDIT_IterateInventory" then
+    if event == "APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED" then
+        if SaveLoaded and CharacterCreated then
+            CharacterCreated = false 
+            Ext.Utils.Print("Origin or Hireling Edited")
+            RepairChangedDbs()
+        end
+    elseif event == "APPEARANCE_EDIT_IterateInventory" then
         SetOwner(entity, NewTav)
     elseif event == "APPEARANCE_EDIT_IterateInventory_Done" then
         MoveAllItemsTo(SpellCaster, NewTav, 1, 1, 1, 1)
@@ -459,19 +484,28 @@ Ext.Osiris.RegisterListener("EntityEvent", 2, "after", function (entity, event)
             AddTadpole(NewTav, GetTadpolePowersCount(SpellCaster))
         end
 
+        Osi["DB_IsOrWasInParty"](NewTav)
+
         MakeNPC(SpellCaster)
         SetOnStage(SpellCaster, 0)
         Osi.PROC_RemoveAllPolymorphs(SpellCaster)
         SetImmortal(SpellCaster, 0)
-        Die(SpellCaster, 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 0)
+        Die(SpellCaster, 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
         Osi["DB_GLO_PartyMembers_Kicked"](SpellCaster)
     end
 end)
 
-Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, name)
-    if name == "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS" then
+Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function (event)
+    if event == "APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED" then
+        Ext.Utils.Print("APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED", SaveLoaded, CharacterCreated)
+        if SaveLoaded and CharacterCreated then
+            CharacterCreated = false 
+            Ext.Utils.Print("Origin or Hireling Edited")
+            RepairChangedDbs()
+        end
+    elseif event == "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS" then
         -- TimerActive = false 
-        CharacterMoveTo(uuid, SpellCaster, "", "", 1)
+        CharacterMoveTo(NewTav, SpellCaster, "", "", 1)
 
         IterateInventory(SpellCaster, "APPEARANCE_EDIT_IterateInventory", "APPEARANCE_EDIT_IterateInventory_Done")
 
@@ -479,16 +513,16 @@ Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, n
             local InsertTable = {}
             local Modified = false
 
-            InsertTable, _, Modified = DBOperations(uuid, entry)
+            InsertTable, _, Modified = DBOperations(NewTav, entry)
 
             if Modified then
                 Osi["DB_ApprovalRating"](table.unpack(InsertTable))
-                ChangeApprovalRating(InsertTable[1], uuid, 0, InsertTable[3])
-                -- Ext.Utils.Print("Changing Approval Rating: ", InsertTable[1], uuid, InsertTable[3])
+                ChangeApprovalRating(InsertTable[1], NewTav, 0, InsertTable[3])
+                -- Ext.Utils.Print("Changing Approval Rating: ", InsertTable[1], NewTav, InsertTable[3])
             end
         end
 
-        SetFaction(uuid, Faction)
+        SetFaction(NewTav, Faction)
 
         RepairChangedDbs()
 
@@ -507,9 +541,8 @@ Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, n
         --     Osi["DB_GLO_Backgrounds_Players"]:Delete(table.unpack(entry))
         -- end
 
-        OpenMessageBox(uuid, "Appearance editing complete, enjoy.")
+        OpenMessageBox(NewTav, "Appearance editing complete, enjoy.")
 
-        CharacterEnableAllCrimes(uuid)
         -- Cleanup
         -- NewTav = nil
         -- SpellCaster = nil
@@ -521,7 +554,6 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
     if SaveLoaded and CharacterCreated and not (string.find(uuid, "S_", 1, true) == 1) then
         CharacterCreated = false
         Ext.Utils.Print(tostring(uuid))
-        CharacterDisableAllCrimes(uuid)
 
         local DarkUrgeTag = 'fe825e69-1569-471f-9b3f-28fd3b929683'
         local GenericTag = '730e82f3-c067-44a4-985b-0dfe079d4fea'
@@ -640,37 +672,39 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
             local QueryShort = t[1]
             local ParamCount = select(2, string.gsub(t[2], ",", "")) + 1
 
-            for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
-                if not (QueryShort == "DB_ApprovalRating") and not (QueryShort == "DB_ClassDeityTags_For") then
-                    -- Ext.Utils.Print("Doing work on: ", QueryShort, dump(entry))
-                    local InsertTable = {}
-                    local MarkedForDeletion = false
-                    local Modified = false
+            local success, _ = pcall(try_get_db, QueryShort, ParamCount)
 
-                    if CleanUp then
-                        MarkedForDeletion = DBCleanOperations(uuid, entry)
-                    else
-                        InsertTable, MarkedForDeletion, Modified = DBOperations(uuid, entry)
-                    end
+            if success then
+                for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
+                    if not (QueryShort == "DB_ApprovalRating") and not (QueryShort == "DB_ClassDeityTags_For") then
+                        -- Ext.Utils.Print("Doing work on: ", QueryShort, dump(entry))
+                        local InsertTable = {}
+                        local MarkedForDeletion = false
+                        local Modified = false
 
-                    if MarkedForDeletion then
-                        -- Ext.Utils.Print("Deleting New: ", dump(InsertTable))
-                        Osi[QueryShort]:Delete(table.unpack(entry))
-                    elseif Modified then
-                        -- Ext.Utils.Print("Deleting OG: ", dump(entry))
-                        Osi[QueryShort]:Delete(table.unpack(entry))
-                        -- Ext.Utils.Print("Inserting New: ", dump(InsertTable))
-                        Osi[QueryShort](table.unpack(InsertTable))
+                        if CleanUp then
+                            MarkedForDeletion = DBCleanOperations(uuid, entry)
+                        else
+                            InsertTable, MarkedForDeletion, Modified = DBOperations(uuid, entry)
+                        end
+
+                        if MarkedForDeletion then
+                            -- Ext.Utils.Print("Deleting New: ", dump(InsertTable))
+                            Osi[QueryShort]:Delete(table.unpack(entry))
+                        elseif Modified then
+                            -- Ext.Utils.Print("Deleting OG: ", dump(entry))
+                            Osi[QueryShort]:Delete(table.unpack(entry))
+                            -- Ext.Utils.Print("Inserting New: ", dump(InsertTable))
+                            Osi[QueryShort](table.unpack(InsertTable))
+                        end
                     end
                 end
             end
 
             if key == DBQuerySize and not CleanUp then
-                ObjectTimerLaunch(uuid, "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS", 5000, 1)
+                TimerLaunch("APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS", 5000)
             end
         end
-
-
 
         -- -- Remove improper character
         -- if CleanUp then
@@ -685,9 +719,6 @@ end)
 
 -- It's testing time as I test all over the code
 
--- Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _, _, _)
---     Ext.Utils.Print("using spell", uuid, name)
--- end)
 
 -- Ext.Osiris.RegisterListener("AddedTo", 3, "after", function (entity, char, _)
 --     if TimerActive and not (string.find(entity, "Underwear", 1, true)) and not (string.find(entity, "ARM", 1, true)) and not (string.find(entity, "WPN", 1, true)) then
