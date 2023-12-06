@@ -607,8 +607,6 @@ function Utils.ShiftEquipmentVisual(character, reverse)
                 end
             end
         end
-
-        Entity:Replicate("ServerCharacter")
     elseif (PersistentVars["OriginalTemplates"] and not PersistentVars["OriginalTemplates"][UUIDChar]) then
         -- Utils.Warn("Your persistant vars are GONE. If you have a resculpted character, resculpt again or else you will have ISSUES.")
     end
@@ -631,29 +629,39 @@ end
 function Utils.CopyAppearanceVisuals(uuid)
     local Entity = Ext.Entity.Get(uuid)
 
-    if (Entity.GameObjectVisual.TemplateId and string.len(Entity.GameObjectVisual.TemplateId) == 0) then
-        Entity.GameObjectVisual.TemplateId = Entity.GameObjectVisual.RootTemplateId
+    if (not Entity.AppearanceOverride) then
+        Entity:CreateComponent("AppearanceOverride")
+
+        pcall(Osi.ObjectTimerLaunch, uuid, "AEE_Override_Replication", 500)
+    else
+        if (Utils.Size(Entity.AppearanceOverride.Visual.Elements) == 0) then
+            Entity.AppearanceOverride.Visual.Elements = Constants.DefaultElements
+        end
+
+        if (Utils.Size(Entity.AppearanceOverride.Visual.Elements) == 0) then
+            Entity.AppearanceOverride.Visual.AdditionalChoices = Constants.DefaultAdditionalChoices
+        end
+
+        Utils.CloneProxy(Entity.AppearanceOverride.Visual, Entity.CharacterCreationAppearance);
+
+        Utils.CloneProxy(Entity.AppearanceOverride.Visual.Visuals, Entity.CharacterCreationAppearance.Visuals);
+        Utils.CloneProxy(Entity.AppearanceOverride.Visual.Elements, Entity.CharacterCreationAppearance.Elements);
+
+        if (Entity.GameObjectVisual.Type ~= 2) then
+            Entity.GameObjectVisual.Type = 2
+        end
+
+        Entity:Replicate("GameObjectVisual")
+        Entity:Replicate("AppearanceOverride")
     end
-
-    if (Utils.Size(Entity.GameObjectVisual.VisualData.Elements) == 0) then
-        Entity.GameObjectVisual.VisualData.Elements = Constants.DefaultElements
-    end
-
-    if (Utils.Size(Entity.GameObjectVisual.VisualData.Elements) == 0) then
-        Entity.GameObjectVisual.VisualData.AdditionalChoices = Constants.DefaultAdditionalChoices
-    end
-
-    Utils.CloneProxy(Entity.GameObjectVisual.VisualData, Entity.CharacterCreationAppearance);
-
-    Utils.CloneProxy(Entity.GameObjectVisual.VisualData.Visuals, Entity.CharacterCreationAppearance.Visuals);
-    Utils.CloneProxy(Entity.GameObjectVisual.VisualData.Elements, Entity.CharacterCreationAppearance.Elements);
-
-    if (Entity.GameObjectVisual.Type ~= 2) then
-        Entity.GameObjectVisual.Type = 2
-    end
-
-    Entity:Replicate("GameObjectVisual")
 end
+
+-- Delay replication because creating component takes a little bit
+Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function(uuid, event)
+    if (event == "AEE_Override_Replication") then
+        Utils.CopyAppearanceVisuals(uuid)
+    end
+end)
 
 function Utils.FixREALLYTags(char, secondaryChar)
     local Entity = Ext.Entity.Get(char)

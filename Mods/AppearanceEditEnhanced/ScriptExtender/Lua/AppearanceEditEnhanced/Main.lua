@@ -97,7 +97,9 @@ Ext.Osiris.RegisterListener("ChangeAppearanceCancelled", 1, "before", function(u
 end)
 
 Ext.Osiris.RegisterListener("ChangeAppearanceCompleted", 1, "before", function(uuid)
-    Utils.CopyAppearanceVisuals(uuid)
+    if (Utils.IsOrigin) then
+        Utils.CopyAppearanceVisuals(uuid)
+    end
 
     Utils.ResetSecretOriginVoice(uuid)
 end)
@@ -184,7 +186,6 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         oldEntity:Replicate("CharacterCreationStats")
 
         oldEntity.ServerCharacter.Character.BaseVisual = newEntity.ServerCharacter.Character.BaseVisual
-        oldEntity:Replicate("ServerCharacter")
 
         Utils.CopyAppearanceVisuals(SpellCaster)
 

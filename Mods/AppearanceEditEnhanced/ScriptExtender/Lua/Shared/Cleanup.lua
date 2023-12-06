@@ -71,6 +71,7 @@ local function CloneTemplateEntities()
     for origin, copy in pairs(PersistentVars["OriginCopiedChars"]) do
         Utils.CloneProxy(Ext.Entity.Get(origin).ServerCharacter.Character.Template, Ext.Entity.Get(copy).ServerCharacter.Character.Template)
         Utils.ShiftEquipmentVisual(origin, true)
+        Utils.CopyAppearanceVisuals(origin)
     end
 end
 

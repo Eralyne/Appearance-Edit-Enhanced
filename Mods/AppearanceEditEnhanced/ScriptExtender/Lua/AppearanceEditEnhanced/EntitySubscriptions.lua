@@ -50,12 +50,8 @@ Ext.Entity.Subscribe("GameObjectVisual", function(entity, _, _)
 
     if (GOV.Type == 4 and PersistentVars["OriginalTemplates"]
             and PersistentVars["OriginalTemplates"][UUIDChar]
-            and GOV.RootTemplateId == GOV.TemplateId) then
+            and GOV.RootTemplateId == entity.ServerCharacter.Character.Template.Id) then
         entity.GameObjectVisual.Type = 2
-        -- elseif (GOV.Type == 2 and PersistentVars["OriginalTemplates"]
-        --         and PersistentVars["OriginalTemplates"][UUIDChar]
-        --         and PersistentVars["OriginalTemplates"][UUIDChar]["CopiedId"] ~= GOV.RootTemplateId) then
-        --     entity.GameObjectVisual.Type = 4
         pcall(Osi.ObjectTimerLaunch, UUIDChar, "AEE_GOV_Replication", 250)
     elseif (GOV.Type == 0 or GOV.Type == 1) then
         Utils.CopyAppearanceVisuals(UUIDChar)
