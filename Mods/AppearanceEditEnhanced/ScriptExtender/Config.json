@@ -1,5 +1,5 @@
 {
     "RequiredVersion": 4,
-    "ModTable": "AppearanceEdit",
+    "ModTable": "AppearanceEditEnhanced",
     "FeatureFlags": ["Lua"]
 }

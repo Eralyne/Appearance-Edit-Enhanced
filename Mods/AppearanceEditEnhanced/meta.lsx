@@ -8,21 +8,21 @@
                 <node id="ModuleInfo">
                     <attribute id="Author" type="LSWString" value="Eralyne"/>
                     <attribute id="CharacterCreationLevelName" type="FixedString" value=""/>
-                    <attribute id="Description" type="LSWString" value="Enables editing appearance of custom and dark urge characters"/>
-                    <attribute id="Folder" type="LSWString" value="AppearanceEdit"/>
+                    <attribute id="Description" type="LSWString" value="Enhances the capabilities of the magic mirror"/>
+                    <attribute id="Folder" type="LSWString" value="AppearanceEditEnhanced"/>
                     <attribute id="GMTemplate" type="FixedString" value=""/>
                     <attribute id="LobbyLevelName" type="FixedString" value=""/>
                     <attribute id="MD5" type="LSString" value=""/>
                     <attribute id="MainMenuBackgroundVideo" type="FixedString" value=""/>
                     <attribute id="MenuLevelName" type="FixedString" value=""/>
-                    <attribute id="Name" type="FixedString" value="AppearanceEdit"/>
+                    <attribute id="Name" type="FixedString" value="AppearanceEditEnhanced"/>
                     <attribute id="NumPlayers" type="uint8" value="4"/>
                     <attribute id="PhotoBooth" type="FixedString" value=""/>
                     <attribute id="StartupLevelName" type="FixedString" value=""/>
                     <attribute id="Tags" type="LSWString" value="Customization;Utility"/>
                     <attribute id="Type" type="FixedString" value="Add-on"/>
-                    <attribute id="UUID" type="FixedString" value="16c3d988-ce49-4298-a49b-bbb46437fcea"/>
-                    <attribute id="Version" type="int64" value="72057596185411584"/>
+                    <attribute id="UUID" type="FixedString" value="7b8366bd-abc1-4f9f-ba9d-585549b4a750"/>
+                    <attribute id="Version" type="int64" value="72198331526283264"/>
                     <children>
                         <node id="PublishVersion">
                             <attribute id="Version" type="int32" value="1"/>
