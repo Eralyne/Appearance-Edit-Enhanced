@@ -462,7 +462,6 @@ Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function (uuid, n
             end
         end
 
-
         SetFaction(uuid, Faction)
 
         RepairChangedDbs()
@@ -505,9 +504,11 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
         if ((string.find(SpellCaster, "S_", 1, true) == 1) or not (IsTagged(SpellCaster, DarkUrgeTag) == IsTagged(uuid, DarkUrgeTag) and IsTagged(SpellCaster, GenericTag) == IsTagged(uuid, GenericTag))) then
             -- Spellcaster is an origin character or Player created a dark urge character when they weren't or a generic character when they were
             -- Ext.Utils.Print("Spellcaster origin is not the same as new character origin, cleaning up new character")
-            OpenMessageBox(SpellCaster, "Spellcaster origin is not the same as new character origin, cleaning up new character")
+            OpenMessageBox(SpellCaster, "Spellcaster origin is not the same as new character origin. If you had an extra character appear that won't go away, please reload your save. Otherwise, ignore this message.")
+
+            return
             -- Mark for Cleanup
-            CleanUp = true
+            -- CleanUp = true
         else
             OpenMessageBox(uuid, "Appearance editing begun. Please wait for it to finish, you will receive another message.")
         end
@@ -637,14 +638,16 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
             end
         end
 
-        -- Remove improper character
-        if CleanUp then
-            MakeNPC(uuid)
-            SetOnStage(uuid, 0)
-            RepairChangedDbs()
-            MakePlayerActive(SpellCaster)
-            return
-        end
+
+
+        -- -- Remove improper character
+        -- if CleanUp then
+        --     MakeNPC(uuid)
+        --     SetOnStage(uuid, 0)
+        --     RepairChangedDbs()
+        --     MakePlayerActive(SpellCaster)
+        --     return
+        -- end
     end
 end)
 
