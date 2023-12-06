@@ -44,18 +44,6 @@ local SharMirrorStats = {
 -- Helper functions --
 ----------------------
 
-local function table_compare_no_order(table1, table2)
-    if #table1 ~= #table2 then return false end
-    local t1_sorted = {table.unpack(table1)}
-    table.sort(t1_sorted)
-    local t2_sorted = {table.unpack(table2)}
-    table.sort(t2_sorted)
-    for i, v1 in ipairs(t1_sorted) do
-        if t2_sorted[i] ~= v1 then return false end
-    end
-    return true
-end
-
 local function equals(o1, o2, ignore_mt)
     if o1 == o2 then return true end
     local o1Type = type(o1)
