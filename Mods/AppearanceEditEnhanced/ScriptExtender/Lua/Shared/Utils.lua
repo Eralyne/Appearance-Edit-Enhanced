@@ -88,6 +88,23 @@ function DelayedCall(ms, func)
     end)
 end
 
+-- Credit: Yoinked from Morbyte
+function TryToReserializeObject(original, clone)
+    local serializer = function()
+        local serialized = Ext.Types.Serialize(clone)
+        Ext.Types.Unserialize(original, serialized)
+    end
+
+    local ok, err = xpcall(serializer, debug.traceback)
+    if not ok then
+        return err
+    elseif not err then
+        return "Mismatch"
+    else
+        return nil
+    end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                       String Helpers                                        --
@@ -236,12 +253,17 @@ function Utils.TempClone(old, new)
 end
 
 function Utils.CloneProxy(old, new)
-    Utils.DeepClean(old)
-    Utils.DeepWrite(old, new)
+    if (Ext.Utils.Version() > 9) then
+        TryToReserializeObject(old, new)
+    else
+        Utils.DeepClean(old)
+        Utils.DeepWrite(old, new)
+    end
 end
 
 function Utils.CloneEntityEntry(old, new, entry)
     Utils.CloneProxy(old[entry], new[entry])
+
 
     local ExcludedReps = Utils.Set(Constants.ExcludedReplications)
 
@@ -332,8 +354,7 @@ local function checkHotBarExists(character)
     if (success) then
         if (result and result["ActiveContainer"] == "DefaultBarContainer"
                 and result["Containers"]
-                and result["Containers"]["DefaultBarContainer"]
-                and PermittedCopyObjects[getmetatable(result["Containers"]["DefaultBarContainer"])]) then
+                and result["Containers"]["DefaultBarContainer"]) then
             return result["Containers"]["DefaultBarContainer"]
         end
     end
@@ -425,7 +446,7 @@ function Utils.RemoveSpellFromHotbar(character, spell, persistantChar)
             -- Clear non-stored spells
             for slotKey, foundSpell in pairs(SpellsFound) do
                 if ((not BarIndex and not SlotIndex) or (BarIndex ~= foundSpell["barIndex"] and SlotIndex ~= foundSpell["slotIndex"])) then
-                    _D(foundSpell)
+                    -- _D(foundSpell)
                     CharacterHotbar[foundSpell["barKey"]]["Elements"][slotKey] = nil
                     SpellsFound[slotKey] = nil
                 end
@@ -466,7 +487,7 @@ function Utils.InsertIntoHotbarSlot(character, persistantChar)
 
 
         for _, bar in pairs(HotBar) do
-            if (bar and bar["Index"] == BarIndex and PermittedCopyObjects[getmetatable(bar.Elements)]) then
+            if (bar and bar["Index"] == BarIndex) then
                 -- for slotKey, slot in pairs(bar.Elements) do
                 --     if (slot and slot["SpellId"] and slot["SpellId"]["Prototype"] == spell) then
                 --         bar.Elements[slotKey] = nil
@@ -504,10 +525,11 @@ function Utils.MoveSpellToSlot(character)
             for _, bar in pairs(HotBar) do
                 if (bar) then
                     for slotKey, slot in pairs(bar.Elements) do
-                        if (slot and slot["SpellId"] and slot["SpellId"]["Prototype"] == NewSlot["SpellId"]["Prototype"]) then
+                        if (slot and slot["SpellId"] and NewSlot["SpellId"] and slot["SpellId"]["Prototype"] == NewSlot["SpellId"]["Prototype"]) then
                             -- Utils.Debug("Spell removed")
                             Removed = true
                             bar.Elements[slotKey] = nil
+                            Ext.Entity.Get(character):Replicate("HotbarContainer")
                         end
                     end
                 end
@@ -522,6 +544,7 @@ function Utils.MoveSpellToSlot(character)
                             -- Utils.Debug("Spell moved")
                             -- Moved = true
                             bar.Elements[#bar.Elements + 1] = NewSlot
+                            break
                         end
                     end
                 end
@@ -578,12 +601,6 @@ function Utils.RemoveCharacter(character)
     Osi.PROC_CheckPartyFull()
 end
 
---
--- function Utils.HideCharacter(character)
--- Osi.TeleportTo()
--- SYS_Hirelings
--- end
-
 function Utils.ShiftEquipmentVisual(character, reverse)
     -- Utils.Debug((reverse and "Reversing" or "Shifting") .. " Appearance of " .. character)
 
@@ -627,12 +644,14 @@ function Utils.ResetSecretOriginVoice(uuid)
 end
 
 function Utils.CopyAppearanceVisuals(uuid)
-    local Entity = Ext.Entity.Get(uuid)
+    local UUIDChar = Utils.GetGUID(uuid)
+    local Entity = Ext.Entity.Get(UUIDChar)
 
     if (not Entity.AppearanceOverride) then
         Entity:CreateComponent("AppearanceOverride")
 
-        pcall(Osi.ObjectTimerLaunch, uuid, "AEE_Override_Replication", 500)
+        -- I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers
+        pcall(Osi.ObjectTimerLaunch, UUIDChar, "AEE_Override_Replication", 1000)
     else
         if (Utils.Size(Entity.AppearanceOverride.Visual.Elements) == 0) then
             Entity.AppearanceOverride.Visual.Elements = Constants.DefaultElements
@@ -647,7 +666,9 @@ function Utils.CopyAppearanceVisuals(uuid)
         Utils.CloneProxy(Entity.AppearanceOverride.Visual.Visuals, Entity.CharacterCreationAppearance.Visuals);
         Utils.CloneProxy(Entity.AppearanceOverride.Visual.Elements, Entity.CharacterCreationAppearance.Elements);
 
-        if (Entity.GameObjectVisual.Type ~= 2) then
+        if (Entity.GameObjectVisual.Type ~= 2 and PersistentVars["OriginalTemplates"]
+                and PersistentVars["OriginalTemplates"][UUIDChar]
+                and Entity.GameObjectVisual.RootTemplateId == PersistentVars["OriginalTemplates"][UUIDChar]["CopiedId"]) then
             Entity.GameObjectVisual.Type = 2
         end
 
@@ -655,13 +676,6 @@ function Utils.CopyAppearanceVisuals(uuid)
         Entity:Replicate("AppearanceOverride")
     end
 end
-
--- Delay replication because creating component takes a little bit
-Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function(uuid, event)
-    if (event == "AEE_Override_Replication") then
-        Utils.CopyAppearanceVisuals(uuid)
-    end
-end)
 
 function Utils.FixREALLYTags(char, secondaryChar)
     local Entity = Ext.Entity.Get(char)
@@ -762,11 +776,11 @@ function Utils.PersistHotBarSlot(character)
     if (barIndex and slotIndex) then
         local _, slot = Utils.GetHotbarSlotFromIndex(UUIDChar, barIndex, slotIndex)
 
-        if (slot and PermittedCopyObjects[getmetatable(slot)]) then
+        if (slot) then
             local convertedSlot = {}
 
             for key, val in pairs(slot) do
-                if (PermittedCopyObjects[getmetatable(val)]) then
+                local iterable = function()
                     convertedSlot[key] = {}
                     for innerKey, innerVal in pairs(val) do
                         -- We only do one inner copy and pray we don't miss anything important
@@ -774,7 +788,11 @@ function Utils.PersistHotBarSlot(character)
                             convertedSlot[key][innerKey] = innerVal
                         end
                     end
-                else
+                end
+
+                local ok, _ = pcall(iterable)
+
+                if not ok then
                     convertedSlot[key] = val
                 end
             end
@@ -818,3 +836,16 @@ end
 function Utils.Error(message)
     Ext.Utils.Print(AEE.modPrefix .. ' [Error] ' .. message)
 end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                         Timers                                              --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+-- Delay replication because creating component takes a little bit
+Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function(uuid, event)
+    if (event == "AEE_Override_Replication") then
+        Utils.CopyAppearanceVisuals(uuid)
+    end
+end)

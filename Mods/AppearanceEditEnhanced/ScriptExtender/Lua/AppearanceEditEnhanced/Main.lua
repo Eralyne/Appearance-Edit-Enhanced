@@ -39,14 +39,6 @@ local SpellCaster
 Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", function()
     -- We track this to prevent doing operations on new game
     SaveLoaded = true
-
-    -- Reset GameObjectVisual to use custom looks
-    for char, _ in pairs(PersistentVars["OriginalTemplates"]) do
-        local Entity = Ext.Entity.Get(char)
-
-        Entity.GameObjectVisual.Type = 2
-        Entity:Replicate("GameObjectVisual")
-    end
 end)
 
 -- Do work depending on spell used
