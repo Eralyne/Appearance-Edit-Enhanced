@@ -8,14 +8,14 @@
                 <node id="ModuleInfo">
                     <attribute id="Author" type="LSWString" value="Eralyne"/>
                     <attribute id="CharacterCreationLevelName" type="FixedString" value=""/>
-                    <attribute id="Description" type="LSWString" value="Enables editing appearance when respecing."/>
-                    <attribute id="Folder" type="LSWString" value="Respec Appearance Edit"/>
+                    <attribute id="Description" type="LSWString" value="Enables editing appearance of certain actors."/>
+                    <attribute id="Folder" type="LSWString" value="AppearanceEdit"/>
                     <attribute id="GMTemplate" type="FixedString" value=""/>
                     <attribute id="LobbyLevelName" type="FixedString" value=""/>
                     <attribute id="MD5" type="LSString" value=""/>
                     <attribute id="MainMenuBackgroundVideo" type="FixedString" value=""/>
                     <attribute id="MenuLevelName" type="FixedString" value=""/>
-                    <attribute id="Name" type="FixedString" value="Respec Appearance Edit"/>
+                    <attribute id="Name" type="FixedString" value="AppearanceEdit"/>
                     <attribute id="NumPlayers" type="uint8" value="4"/>
                     <attribute id="PhotoBooth" type="FixedString" value=""/>
                     <attribute id="StartupLevelName" type="FixedString" value=""/>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<save>
+    <version major="4" minor="0" revision="9" build="307"/>
+    <region id="Origins">
+        <node id="root">
+            <children>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="1"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="Description" type="TranslatedString" handle="h6a745207gc5e9g4d27gab7eg3358b5b76cdd" version="1"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="he7b2baecg7683g43acga5b0gb168078ec60f" version="1"/>
+                    <attribute id="Name" type="FixedString" value="Generic"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="UUID" type="guid" value="a4b56492-d5ac-4a84-8e45-5437cd9da7f3"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="5ee56242-d07c-482e-9260-24529d1473a3"/>
+                    <children>
+                        <node id="ReallyTags">
+                            <attribute id="Object" type="guid" value="264a6880-9a51-429c-a9fc-97f8952baf90"/>
+                        </node>
+                    </children>
+                </node>
+            </children>
+        </node>
+    </region>
+</save>

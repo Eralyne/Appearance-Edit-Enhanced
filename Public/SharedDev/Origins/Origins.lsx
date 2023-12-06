@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<save>
+    <version major="4" minor="0" revision="9" build="328"/>
+    <region id="Origins">
+        <node id="root">
+            <children>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="5b1e726f-52bf-4e93-a798-9f93c067ee7f"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="d8cadb42-0ff9-4049-afaf-e5d78d06a399"/>
+                    <attribute id="Description" type="TranslatedString" handle="he3410664g2b45g458dgb406g1693363b1673" version="4"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h498af8dag4a43g40dfg820bgd866e9109eaf" version="2"/>
+                    <attribute id="GlobalTemplate" type="guid" value="7bed07ee-d1db-498d-bbfd-600ddf04676e"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Barbarian"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="0ab2874d-cfdc-405e-8a97-d37bfbb23c52"/>
+                    <attribute id="SubRaceUUID" type="guid" value="78f5e3e8-a9f8-4249-8007-84dc922640b2"/>
+                    <attribute id="UUID" type="guid" value="106511fd-b572-4468-bf9a-6b3da3e8646a"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="ebd86391-c8a7-4cfd-bcdf-d12fd64c28d2"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="229775c9-3044-4779-a3bb-532c39238e03"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="92cd50b6-eb1b-4824-8adb-853e90c34c90"/>
+                    <attribute id="Description" type="TranslatedString" handle="h0e8378d5g4785g4ebbg88efg0c8741b88d40" version="4"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h19b11762gad8eg4de1g8598gbbf6431d8c1b" version="4"/>
+                    <attribute id="GlobalTemplate" type="guid" value="4d3c9cb3-ca34-46ba-9c81-44081270bfde"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Bard"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="78cd3bcc-1c43-4a2a-aa80-c34322c16a04"/>
+                    <attribute id="SubRaceUUID" type="guid" value="a8828cb9-589d-489e-8373-6495eb31ffc1"/>
+                    <attribute id="UUID" type="guid" value="54b02e05-56e7-4f55-8a73-78ce8a479493"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="b1137960-318f-4ef1-b05f-f3d755c06773"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="633aa4be-365f-4358-ba56-e2b85f9a88ec"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="114e7aee-d1d4-4371-8d90-8a2080592faf"/>
+                    <attribute id="Description" type="TranslatedString" handle="h48c8bd29ga1a6g4b31g9625g0dd6580ccd89" version="4"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="ha179a7b0g375cg4cfdgae3dge74d722c0629" version="4"/>
+                    <attribute id="GlobalTemplate" type="guid" value="12e541ac-1eb3-4b8c-a8b8-95263e30b217"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Cleric"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a"/>
+                    <attribute id="SubClassUUID" type="guid" value="c54d7591-b305-4f22-b2a7-1bf5c4a3470a"/>
+                    <attribute id="SubRaceUUID" type="guid" value="4fda6bce-0b91-4427-901f-690c2d091c47"/>
+                    <attribute id="UUID" type="guid" value="db94d9bd-f4b6-4664-b592-c49d25fe7ad8"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="5099a882-72c6-45fb-bde7-b0e3366ba176"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="efcb0b57-5d5a-4a54-a7b3-a618829fe379"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="457d0a6e-9da8-4f95-a225-18382f0e94b5"/>
+                    <attribute id="Description" type="TranslatedString" handle="h2c71f710gd07dg461eg9044g4fb1c1e1c86d" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h51b33525g162ag4454gacdagc49ec815bf6a" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="49f522f8-9ac9-431e-ab39-a45e38e222c2"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Druid"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="b6dccbed-30f3-424b-a181-c4540cf38197"/>
+                    <attribute id="SubRaceUUID" type="guid" value="b03bdf0f-876d-4567-a0a3-28627319c919"/>
+                    <attribute id="UUID" type="guid" value="f634d2b9-f762-4050-8a99-98beb2010e20"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="062f74be-0a2e-458a-b60b-0222b1a0bb6c"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="1252a86e-9baa-4ccb-b8ce-2378ae006f0b"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="721dfac3-92d4-41f5-b773-b7072a86232f"/>
+                    <attribute id="Description" type="TranslatedString" handle="h2f217105g57b6g4a8cga099gcd4b828a3f8d" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="he3abbc75ge292g4fd6ga8a8gae2545cee275" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="d61d12ad-dc80-4805-8c6e-fb876da196cd"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Fighter"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="45f4ac10-3c89-4fb2-b37d-f973bb9110c0"/>
+                    <attribute id="SubRaceUUID" type="guid" value="76057327-da03-4398-aaf0-c59345ef3a8b"/>
+                    <attribute id="UUID" type="guid" value="8078e34e-2dce-44ee-8072-072ac433350f"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="3ae19dc4-4d1f-4576-a22c-89fac602cd00"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="5b1e726f-52bf-4e93-a798-9f93c067ee7f"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="c4598bdb-fc07-40dd-a62c-90cc138bd76f"/>
+                    <attribute id="Description" type="TranslatedString" handle="h1271cbf3g741eg44e2g9157g698996b66bcf" version="2"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h9372b7f8g91f3g4f39g884eg0f75dfff07b4" version="2"/>
+                    <attribute id="GlobalTemplate" type="guid" value="0b149cab-4438-467a-953d-8697535b953d"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Monk"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="bdf9b779-002c-4077-b377-8ea7c1faa795"/>
+                    <attribute id="UUID" type="guid" value="fcd08908-a761-4dad-874f-ee27441547bd"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="070195f3-384d-4014-8be2-1d79d742dd3f"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="7e820dee-a8fc-43b2-8661-2b404454bade"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="ff4d9497-023c-434a-bd14-82fc367e991c"/>
+                    <attribute id="Description" type="TranslatedString" handle="h23d5c3ecg0184g4ca8gbb48g6c2325c59aa0" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="had7df2feg3eaag43abgacb4gd57517c59bfd" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="244e782b-a99c-444a-bd8d-d356c26c2902"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Paladin"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="5c39a726-71c8-4748-ba8d-f768b3c11a91"/>
+                    <attribute id="SubClassUUID" type="guid" value="1c761ad0-6f5f-409e-ac1d-ddf6f85c1fc4"/>
+                    <attribute id="UUID" type="guid" value="10721afe-d6b6-46f6-975c-828d8de713d3"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="8e5a1dd0-7ab5-4d26-81e6-b2d23b52f808"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="e8c84134-5e91-4ecc-881a-efc47680129b"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="36be18ba-23db-4dff-bfa6-ae105ce43144"/>
+                    <attribute id="Description" type="TranslatedString" handle="h16aa10aag1285g4625g848cg3eb15b1a31d9" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="he1ea5bcdgd3c2g4c74g86deg93defc0406de" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="0488a406-402c-4bd1-ba38-63b28c112d8d"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Ranger"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="4f5d1434-5175-4fa9-b7dc-ab24fba37929"/>
+                    <attribute id="UUID" type="guid" value="7198b8ec-8fb4-4a44-9306-a68d533d1cfb"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="9aea6a01-05c5-4296-8223-d4f60be851c4"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="ac38525a-222b-4280-9c8e-60d5533b675c"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="e8b1eab0-ef11-40a2-8a0b-cee8d062bf2a"/>
+                    <attribute id="Description" type="TranslatedString" handle="hef8e826dg3697g45dfg8445gc6a0dcc67500" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h888ea7fage1cfg4431gbbd5g334d4a5f240d" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="e4818484-7ee4-466b-82b3-60bbd7b2ff8f"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Rogue"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="0eb594cb-8820-4be6-a58d-8be7a1a98fba"/>
+                    <attribute id="UUID" type="guid" value="9e188239-c0ae-40d2-9298-930095e170b5"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="4fc93197-eee8-4d47-8495-89afc46ab563"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="e9aeac40-6c4e-4d81-9a24-e9eeb6208e85"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="784001e2-c96d-4153-beb6-2adbef5abc92"/>
+                    <attribute id="Description" type="TranslatedString" handle="h925015f2g1825g474ega4bcg450e9c20c8b8" version="5"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="ha5ebd440g5997g48a2gbbc5g7685e3084924" version="4"/>
+                    <attribute id="GlobalTemplate" type="guid" value="097aa418-eda5-47f9-867f-29a4339be03e"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Sorcerer"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="45f4ac10-3c89-4fb2-b37d-f973bb9110c0"/>
+                    <attribute id="SubRaceUUID" type="guid" value="30fafb0b-7c8b-4917-bd2a-536233b35d3c"/>
+                    <attribute id="UUID" type="guid" value="5f3a18b6-453a-467e-a3a5-b103e1e01b31"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="5708de53-dce5-4fa5-b3d5-70b715a03838"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="76925f0b-3ec8-4f42-86a9-cd4f745af2ac"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="b4225a4b-4bbe-4d97-9e3c-4719dbd1487c"/>
+                    <attribute id="Description" type="TranslatedString" handle="h0989c641g1b55g444dga6fdg217446754db2" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h0810e586g112cg4aa9gb665g3a04a3ef1a2b" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="ee3f1f8d-f2d1-43f2-aba0-72cacafce03c"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Warlock"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="0ab2874d-cfdc-405e-8a97-d37bfbb23c52"/>
+                    <attribute id="SubClassUUID" type="guid" value="e1e4a21f-9405-46ec-81a0-ccc8d58d9736"/>
+                    <attribute id="SubRaceUUID" type="guid" value="fe584d14-71ea-4bee-8ba0-99f780d4c957"/>
+                    <attribute id="UUID" type="guid" value="f9917348-90e4-4acd-93b1-d8f994bce051"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="635eea4a-a223-4f36-8788-c706713b8486"/>
+                </node>
+                <node id="Origin">
+                    <attribute id="AppearanceLocked" type="bool" value="false"/>
+                    <attribute id="AvailableInCharacterCreation" type="uint8" value="2"/>
+                    <attribute id="BackgroundUUID" type="guid" value="8807a6c6-d8cf-494b-aec2-cc01d7517a56"/>
+                    <attribute id="BodyShape" type="uint8" value="2"/>
+                    <attribute id="BodyType" type="uint8" value="2"/>
+                    <attribute id="ClassUUID" type="guid" value="a865965f-501b-46e9-9eaa-7748e8c04d09"/>
+                    <attribute id="Description" type="TranslatedString" handle="hd384707fgd032g4cd9g8a52gdc76f3a53226" version="3"/>
+                    <attribute id="DisplayName" type="TranslatedString" handle="h2b7fe12ege3e4g42f0g8b9bg6ee81c206ea1" version="3"/>
+                    <attribute id="GlobalTemplate" type="guid" value="2c8c93f0-898b-42d6-b2ca-cf4922852632"/>
+                    <attribute id="Identity" type="uint8" value="3"/>
+                    <attribute id="IsHenchman" type="bool" value="true"/>
+                    <attribute id="LockClass" type="bool" value="false"/>
+                    <attribute id="LockRace" type="bool" value="false"/>
+                    <attribute id="Name" type="FixedString" value="Hireling_Wizard"/>
+                    <attribute id="Passives" type="LSString" value="DeathSavingThrows"/>
+                    <attribute id="RaceUUID" type="guid" value="f1b3f884-4029-4f0f-b158-1f9fe0ae5a0d"/>
+                    <attribute id="SubClassUUID" type="guid" value="36286b0a-26f9-4b4e-9311-fd1404301d20"/>
+                    <attribute id="SubRaceUUID" type="guid" value="2cf6c770-24ab-4608-9617-d1e46c11ab55"/>
+                    <attribute id="UUID" type="guid" value="2b5ac4dd-0b15-472c-b215-1f47fbbdfcbe"/>
+                    <attribute id="Unique" type="bool" value="false"/>
+                    <attribute id="VoiceTableUUID" type="guid" value="caa14929-91fe-41c6-a63c-8426f44593e5"/>
+                </node>
+            </children>
+        </node>
+    </region>
+</save>
