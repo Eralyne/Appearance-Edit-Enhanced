@@ -384,7 +384,6 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
                     Osi.SetFaction(entry[2], "cfb709b3-220f-9682-bcfb-6f0d8837462e")
                     Osi.PROC_RemoveAllDialogEntriesForSpeaker(entry[2])
                     Osi.SetHasDialog(entry[2], 0)
-                    Osi.DismissAvatar(entry[2], 1)
                     Osi.PROC_CheckPartyFull();
                     Osi.PROC_CRIME_PrisonRemoveFugitiveStatuses(entry[2])
                     Osi.SetOnStage(entry[2], 0)
@@ -393,7 +392,6 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
                     Osi.Die(entry[2], 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
                     Osi.LeaveParty(Osi.GetReservedUserID(entry[2]))
                     Osi["DB_GLO_PartyMembers_Kicked"](entry[2])
-                    Osi.PROC_GLO_AvatarDismissed(entry[2])
 
                     Osi.PROC_CheckPartyFull();
 
@@ -523,7 +521,6 @@ Ext.Osiris.RegisterListener("EntityEvent", 2, "after", function (entity, event)
         Osi.SetFaction(SpellCaster, "cfb709b3-220f-9682-bcfb-6f0d8837462e")
         Osi.PROC_RemoveAllDialogEntriesForSpeaker(SpellCaster)
         Osi.SetHasDialog(SpellCaster, 0)
-        Osi.DismissAvatar(SpellCaster, 1)
         Osi.PROC_CheckPartyFull();
         Osi.PROC_CRIME_PrisonRemoveFugitiveStatuses(SpellCaster)
         Osi.SetOnStage(SpellCaster, 0)
@@ -533,7 +530,6 @@ Ext.Osiris.RegisterListener("EntityEvent", 2, "after", function (entity, event)
         Osi.LeaveParty(Osi.GetReservedUserID(SpellCaster))
         Osi["DB_GLO_PartyMembers_Kicked"](SpellCaster)
         Osi.PROC_CheckPartyFull();
-        Osi.PROC_GLO_AvatarDismissed(SpellCaster)
 
         Osi["DB_GLO_PartyMembers_DefaultFaction"]:Delete(SpellCaster, "Companion11_a36493ce-5798-d27f-1e24-01cb79fbdb1b")
     end
