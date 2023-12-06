@@ -328,41 +328,45 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
         SpellCaster = uuid
         Ext.Utils.Print(SpellCaster .. " casting spell")
 
-        for _, query in pairs(DBQueries) do
-            -- Reset the SavedDB query before adding
-            SavedDBs[query] = nil
+        if ((string.find(uuid, "S_", 1, true) == 1)) then                
+            for _, query in pairs(DBQueries) do
+                -- Reset the SavedDB query before adding
+                SavedDBs[query] = nil
 
-            local t = {}
-            for v in query:gmatch("[^(]+") do
-                table.insert(t, v)
-            end
+                local t = {}
+                for v in query:gmatch("[^(]+") do
+                    table.insert(t, v)
+                end
 
-            local QueryShort = t[1]
-            local ParamCount = select(2, string.gsub(t[2], ",", "")) + 1
+                local QueryShort = t[1]
+                local ParamCount = select(2, string.gsub(t[2], ",", "")) + 1
 
-            local success, _ = pcall(try_get_db, QueryShort, ParamCount)
+                local success, _ = pcall(try_get_db, QueryShort, ParamCount)
 
-            if not IgnoreDBs[QueryShort] and success then
-                local UUIDIncluded = false
-                for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
-                    if not UUIDIncluded then
-                        UUIDIncluded = DBCleanOperations(uuid, entry)
-
+                if not IgnoreDBs[QueryShort] and success then
+                    local UUIDIncluded = false
+                    for _, entry in ipairs(Osi[QueryShort]:Get(table.unpack({}, 1, ParamCount))) do
                         if not UUIDIncluded then
-                            if not SavedDBs[query] then
-                                SavedDBs[query] = {}
-                            end
+                            UUIDIncluded = DBCleanOperations(uuid, entry)
 
-                            table.insert(SavedDBs[query], entry)
+                            if not UUIDIncluded then
+                                if not SavedDBs[query] then
+                                    SavedDBs[query] = {}
+                                end
+
+                                table.insert(SavedDBs[query], entry)
+                            end
+                        else
+                            SavedDBs[query] = nil
                         end
-                    else
-                        SavedDBs[query] = nil
                     end
                 end
             end
-        end
 
-        Osi.StartCharacterCreation()
+            Osi.StartCharacterCreation()
+        else
+            Osi.StartChangeAppearance(uuid)
+        end
         Ext.Utils.Print("Character Creator Shown")
     elseif name == "Shout_Open_Respec" then
         Osi.StartRespec(uuid)
@@ -376,55 +380,6 @@ Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function (event)
             CharacterCreated = false
             Ext.Utils.Print("Origin or Hireling Edited")
             RepairChangedDbs()
-        end
-    end
-end)
-
--- Run replacement commands only when custom character is created
-Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
-    if SaveLoaded and CharacterCreated and not (string.find(uuid, "S_", 1, true) == 1) then
-        CharacterCreated = false
-        Ext.Utils.Print(tostring(uuid))
-
-        local ShiftAppearances = false
-
-        if ((string.find(SpellCaster, "S_", 1, true) == 1)) then
-            -- Spellcaster is an origin character or Player created a dark urge character when they weren't or a generic character when they were
-            -- Ext.Utils.Print("Spellcaster origin is not the same as new character origin, cleaning up new character")
-            Osi.OpenMessageBox(SpellCaster, "Spellcaster origin is not the same as new character origin. If you had an extra character appear that won't go away, please reload your save. Otherwise, ignore this message.")
-
-            return
-        else
-            -- Osi.OpenMessageBox(SpellCaster, "Appearance editing begun. Please wait for it to finish, you will receive another message.")
-            -- Mark for Cleanup
-            ShiftAppearances = true
-        end
-
-        -- Remove improper character
-        if ShiftAppearances then
-            -- Adjust entity visuals
-            local oldEntity = Ext.Entity.Get(SpellCaster);
-            local newEntity = Ext.Entity.Get(uuid);
-
-            cloneEntity(oldEntity.ActiveSkeletonSlots,newEntity.ActiveSkeletonSlots); -- Maybe risky
-            cloneEntity(oldEntity.AnimationBlueprint,newEntity.AnimationBlueprint); -- Maybe risky
-            cloneEntity(oldEntity.AnimationSet,newEntity.AnimationSet); -- Maybe risky
-            cloneEntity(oldEntity.CharacterCreationAppearance, newEntity.CharacterCreationAppearance);
-            oldEntity.CharacterCreationStats.Name = newEntity.CharacterCreationStats.Name; -- Good stuff, if only we could sync it fully
-            -- cloneEntity(oldEntity.Data, newEntity.Data); -- Maybe risky
-            cloneEntity(oldEntity.DisplayName, newEntity.DisplayName); -- Maybe risky
-            -- cloneEntity(oldEntity.GameObjectVisual, newEntity.GameObjectVisual); -- Maybe risky
-            -- cloneEntity(oldEntity.Race, newEntity.Race); -- Maybe risky
-            cloneEntity(oldEntity.ServerIconList, newEntity.ServerIconList); -- Maybe risky
-            -- cloneEntity(oldEntity.ServerRaceTag, newEntity.ServerRaceTag); -- Maybe risky
-            cloneEntity(oldEntity.Voice, newEntity.Voice);
-
-            MakeNPC(uuid)
-            SetOnStage(uuid, 0)
-            RepairChangedDbs()
-            MakePlayerActive(SpellCaster)
-
-            Osi.OpenMessageBox(SpellCaster, "Appearance editing finished. Please respec at Withers or with the Respec spell to see changes.")
         end
     end
 end)
