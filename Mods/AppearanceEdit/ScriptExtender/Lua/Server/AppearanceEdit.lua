@@ -40,6 +40,12 @@ local SharMirrorStats = {
     "LOW_SharGrotto_Mirror_MinorCharismaBoon_Passive"
 }
 
+local MissingPiecies = {
+    {"spell", "Target_SurvivalInstinct"},
+    -- {"passive", ""},
+    {"status", "GLO_PIXIESHIELD"}
+}
+
 ----------------------
 -- Helper functions --
 ----------------------
@@ -163,6 +169,14 @@ local IgnoreDBs = utils_set({
     -- "DB_GlobalFlag",
     -- "DB_QRYRTN_CRIME_GetValidCrimeID",
     -- "DB_InternScene_CrimeActive",
+    "DB_OnlyOnce",
+    "DB_QuestDef_LevelUnloading",
+    "DB_QuestDef_ConditionalState",
+    "DB_QuestDef_LevelLoaded",
+    "DB_QuestDef_State",
+    "DB_QuestIsOpened",
+    "DB_QuestIsClosed",
+    "DB_QuestIsAccepted",
     "DB_GLO_PartyMembers_Kicked",
     "DB_GLO_Tutorials_EndTheDay_DepletedShortRestResourceOrSpell",
     "DB_GLO_Playable",
@@ -257,7 +271,7 @@ local function DBOperations(uuid, entry)
             elseif (string.len(dbentry) >= 36 and string.find(SpellCaster, string.sub(dbentry, -36), 1, true)) then
                 Modified = true
                 if DBEntryIsUUID then
-                    table.insert(InsertTable, string.sub(dbentry, -36))
+                    table.insert(InsertTable, string.sub(uuid, -36))
                 else
                     table.insert(InsertTable, uuid)
                 end
@@ -317,7 +331,7 @@ local function RepairChangedDbs()
                 -- Ext.Utils.Print(query, " is being re-inserted", dump())
                 for _, entry in ipairs(item) do
                     -- Ext.Utils.Print("Reinserting: ", dump(entry))
-                    
+
                     Osi[QueryShort](table.unpack(entry))
                 end
             end
@@ -355,9 +369,9 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
 
         local RemovedPlayers = {}
 
-        for _, entry in pairs(Osi["DB_GLO_PartyMembers_Kicked"]:Get(nil)) do
-            table.insert(RemovedPlayers, entry[1])
-        end
+        -- for _, entry in pairs(Osi["DB_GLO_PartyMembers_Kicked"]:Get(nil)) do
+        --     table.insert(RemovedPlayers, entry[1])
+        -- end
 
         RemovedPlayers = utils_set(RemovedPlayers)
 
@@ -365,9 +379,22 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
             if (not Players[entry[2]] and not CharacterOrigins[entry[2]]) then
                 -- Kill all the left over characters
                 if (not RemovedPlayers[entry[2]]) then
-                    SetImmortal(entry[2], 0)
-                    Die(entry[2], 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
+                    Osi.MakeNPC(entry[2])
+                    Osi.PROC_RemoveAllPolymorphs(entry[2])
+                    Osi.SetFaction(entry[2], "cfb709b3-220f-9682-bcfb-6f0d8837462e")
+                    Osi.PROC_RemoveAllDialogEntriesForSpeaker(entry[2])
+                    Osi.SetHasDialog(entry[2], 0)
+                    Osi.PROC_CheckPartyFull();
+                    Osi.PROC_CRIME_PrisonRemoveFugitiveStatuses(entry[2])
+                    Osi.SetOnStage(entry[2], 0)
+                    Osi.SetTag(entry[2], "BLOCK_RESURRECTION_22a75dbb-1588-407e-b559-5aa4e6d4e6a6");
+                    ---@diagnostic disable-next-line: param-type-mismatch
+                    Osi.Die(entry[2], 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
+                    Osi.LeaveParty(Osi.GetReservedUserID(entry[2]))
                     Osi["DB_GLO_PartyMembers_Kicked"](entry[2])
+
+                    Osi.PROC_CheckPartyFull();
+
                     Ext.Utils.Print("Brutally murdering ", entry[2])
                     table.insert(RemovedPlayers, entry[2])
                     RemovedPlayers = utils_set(RemovedPlayers)
@@ -375,35 +402,38 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function (guid, name, _
 
                 -- Clear left over approval ratings
                 Osi["DB_ApprovalRating"]:Delete(table.unpack(entry))
-            end 
+            end
         end
 
         for _, entry in pairs(Osi["DB_Avatars"]:Get(nil)) do
             if (not Players[entry[1]] and not CharacterOrigins[entry[1]]) then
                 -- Clear left over approval ratings
                 Osi["DB_Avatars"]:Delete(table.unpack(entry))
-            end 
+            end
         end
+
+        Osi.PROC_CheckPartyFull();
      end
 end)
 
 -- Remove Resculpt on sneak end
 Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function (guid, name, _, _)
     if name == "SNEAKING" and string.find(guid, GetHostCharacter(), 1, true) then
-        RemoveSpell(guid, "Shout_Open_Creation", 0)
+        Osi.RemoveSpell(guid, "Shout_Open_Creation", 0)
     end
 end)
 
 -- Do Creation Operations
 Ext.Osiris.RegisterListener("CharacterCreationFinished", 0, "before", function ()
     if SaveLoaded then
+        NewTav = nil
         CharacterCreated = true
 
-        TimerLaunch("APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED", 1500)
+        Osi.TimerLaunch("APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED", 1500)
 
         -- Remove Daisies
         for _, entry in pairs(Osi["DB_GLO_DaisyAwaitsAvatar"]:Get(nil, nil)) do
-            SetOnStage(entry[1], 0)
+            Osi.SetOnStage(entry[1], 0)
             Osi["DB_GLO_DaisyAwaitsAvatar"]:Delete(table.unpack(entry))
             Ext.Utils.Print("Daisy Cleaned Up")
         end
@@ -415,7 +445,6 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
     -- Ext.Utils.Print("UsingSpell", uuid, name)
     if name == 'Shout_Open_Creation' then
         SpellCaster = uuid
-        NewTav = nil
         Ext.Utils.Print(SpellCaster .. " casting spell")
 
         -- for _, entry in pairs(Flags) do
@@ -457,7 +486,8 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function (uuid, name, _, _
             end
         end
 
-        StartCharacterCreation()
+        Osi.ClearFlag("GEN_MaxPlayerCountReached_823b5064-8aa4-c0b7-1b8c-657b46987ccd", "NULL_00000000-0000-0000-0000-000000000000")
+        Osi.StartCharacterCreation()
         Ext.Utils.Print("Character Creator Shown")
     end
 end)
@@ -465,49 +495,57 @@ end)
 Ext.Osiris.RegisterListener("EntityEvent", 2, "after", function (entity, event)
     if event == "APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED" then
         if SaveLoaded and CharacterCreated then
-            CharacterCreated = false 
+            CharacterCreated = false
             Ext.Utils.Print("Origin or Hireling Edited")
             RepairChangedDbs()
         end
     elseif event == "APPEARANCE_EDIT_IterateInventory" then
         SetOwner(entity, NewTav)
     elseif event == "APPEARANCE_EDIT_IterateInventory_Done" then
-        MoveAllItemsTo(SpellCaster, NewTav, 1, 1, 1, 1)
-        CopyCharacterEquipment(SpellCaster, NewTav)
-        if GetFlag("f4d2be66-0443-4069-8ca2-570143f17e27", SpellCaster) == 1 then
+        Osi.MoveAllItemsTo(SpellCaster, NewTav, 1, 1, 1, 1)
+        Osi.CopyCharacterEquipment(SpellCaster, NewTav)
+        if Osi.GetFlag("f4d2be66-0443-4069-8ca2-570143f17e27", SpellCaster) == 1 then
             Osi.PROC_GLO_InfernalBox_SetPlayerOwner(NewTav)
             Osi.PROC_GLO_InfernalBox_MoveBoxToCharacter(NewTav)
         end
 
-        if GetTadpolePowersCount(SpellCaster) > 0 then
-            SetTadpoleTreeState(NewTav, 2)
-            AddTadpole(NewTav, GetTadpolePowersCount(SpellCaster))
+        if Osi.GetTadpolePowersCount(SpellCaster) > 0 then
+            Osi.SetTadpoleTreeState(NewTav, 2)
+            Osi.AddTadpole(NewTav, GetTadpolePowersCount(SpellCaster))
         end
 
         Osi["DB_IsOrWasInParty"](NewTav)
 
-        MakeNPC(SpellCaster)
-        SetOnStage(SpellCaster, 0)
+        Osi.MakeNPC(SpellCaster)
         Osi.PROC_RemoveAllPolymorphs(SpellCaster)
-        SetImmortal(SpellCaster, 0)
-        Die(SpellCaster, 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
+        Osi.SetFaction(SpellCaster, "cfb709b3-220f-9682-bcfb-6f0d8837462e")
+        Osi.PROC_RemoveAllDialogEntriesForSpeaker(SpellCaster)
+        Osi.SetHasDialog(SpellCaster, 0)
+        Osi.PROC_CheckPartyFull();
+        Osi.PROC_CRIME_PrisonRemoveFugitiveStatuses(SpellCaster)
+        Osi.SetOnStage(SpellCaster, 0)
+        Osi.SetTag(SpellCaster, "BLOCK_RESURRECTION_22a75dbb-1588-407e-b559-5aa4e6d4e6a6");
+        ---@diagnostic disable-next-line: param-type-mismatch
+        Osi.Die(SpellCaster, 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
+        Osi.LeaveParty(Osi.GetReservedUserID(SpellCaster))
         Osi["DB_GLO_PartyMembers_Kicked"](SpellCaster)
+        Osi.PROC_CheckPartyFull();
+
+        Osi["DB_GLO_PartyMembers_DefaultFaction"]:Delete(SpellCaster, "Companion11_a36493ce-5798-d27f-1e24-01cb79fbdb1b")
     end
 end)
 
 Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function (event)
     if event == "APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED" then
-        Ext.Utils.Print("APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED", SaveLoaded, CharacterCreated)
         if SaveLoaded and CharacterCreated then
-            CharacterCreated = false 
+            CharacterCreated = false
             Ext.Utils.Print("Origin or Hireling Edited")
             RepairChangedDbs()
         end
     elseif event == "APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS" then
-        -- TimerActive = false 
-        CharacterMoveTo(NewTav, SpellCaster, "", "", 1)
+        Osi.CharacterMoveTo(NewTav, SpellCaster, "", "", 1)
 
-        IterateInventory(SpellCaster, "APPEARANCE_EDIT_IterateInventory", "APPEARANCE_EDIT_IterateInventory_Done")
+        Osi.IterateInventory(SpellCaster, "APPEARANCE_EDIT_IterateInventory", "APPEARANCE_EDIT_IterateInventory_Done")
 
         for _, entry in ipairs(Osi["DB_ApprovalRating"]:Get(nil, nil, nil)) do
             local InsertTable = {}
@@ -517,31 +555,36 @@ Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function (event)
 
             if Modified then
                 Osi["DB_ApprovalRating"](table.unpack(InsertTable))
-                ChangeApprovalRating(InsertTable[1], NewTav, 0, InsertTable[3])
-                -- Ext.Utils.Print("Changing Approval Rating: ", InsertTable[1], NewTav, InsertTable[3])
+                Osi.ChangeApprovalRating(InsertTable[1], NewTav, 0, InsertTable[3])
             end
         end
 
-        SetFaction(NewTav, Faction)
+        Osi.SetFaction(NewTav, Faction)
 
         RepairChangedDbs()
 
-        -- local DarkUrgeTag = 'fe825e69-1569-471f-9b3f-28fd3b929683'
+        local DarkUrgeTag = 'fe825e69-1569-471f-9b3f-28fd3b929683'
+        -- local GenericTag = '730e82f3-c067-44a4-985b-0dfe079d4fea'
 
-        -- -- Try to fix Dark Urge, again
-        -- if IsTagged(uuid, DarkUrgeTag) == 1 and IsTagged(SpellCaster, DarkUrgeTag) == 1 then
-        --     for _, entry in ipairs(Osi["DB_ORI_DarkUrge"]:Get(nil)) do
-        --         Osi["DB_ORI_DarkUrge"]:Delete(entry[1])
-        --     end
-        --     Osi["DB_ORI_DarkUrge"](uuid)
+        -- Try to fix Dark Urge, again
+        if IsTagged(NewTav, DarkUrgeTag) == 1 and IsTagged(SpellCaster, DarkUrgeTag) == 1 then
+            for _, entry in ipairs(Osi["DB_ORI_DarkUrge"]:Get(nil)) do
+                Osi["DB_ORI_DarkUrge"]:Delete(entry[1])
+            end
+            Osi["DB_ORI_DarkUrge"](NewTav)
+        end
+
+        --     Osi["DB_QuestIsAccepted"]:Delete("ORI_Avatar_DarkUrge")
+        --     Osi["DB_QuestIsAccepted"]:Delete("ORI_Avatar_DarkUrge_OldFriends")
+        --     Osi["DB_QuestIsOpened"]:Delete("ORI_Avatar_DarkUrge")
+        --     Osi["DB_QuestIsOpened"]:Delete("ORI_Avatar_DarkUrge_OldFriends")
+        -- elseif IsTagged(NewTav, GenericTag) == 1 and IsTagged(SpellCaster, GenericTag) == 1 then
+        --     Osi["DB_QuestIsAccepted"]:Delete("GLO_UnleashPowers")
+        --     Osi["DB_QuestIsOpened"]:Delete("GLO_UnleashPowers")
         -- end
 
-        -- Remove Spellcaster from Inspiration Table
-        -- for _, entry in ipairs(Osi["DB_GLO_Backgrounds_Players"]:Get(SpellCaster, nil)) do
-        --     Osi["DB_GLO_Backgrounds_Players"]:Delete(table.unpack(entry))
-        -- end
 
-        OpenMessageBox(NewTav, "Appearance editing complete, enjoy.")
+        Osi.OpenMessageBox(NewTav, "Appearance editing complete, enjoy.")
 
         -- Cleanup
         -- NewTav = nil
@@ -559,71 +602,71 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
         local GenericTag = '730e82f3-c067-44a4-985b-0dfe079d4fea'
         local CleanUp = false
 
-        if ((string.find(SpellCaster, "S_", 1, true) == 1) or not (IsTagged(SpellCaster, DarkUrgeTag) == IsTagged(uuid, DarkUrgeTag) and IsTagged(SpellCaster, GenericTag) == IsTagged(uuid, GenericTag))) then
+        if ((string.find(SpellCaster, "S_", 1, true) == 1) or not (Osi.IsTagged(SpellCaster, DarkUrgeTag) == Osi.IsTagged(uuid, DarkUrgeTag) and Osi.IsTagged(SpellCaster, GenericTag) == Osi.IsTagged(uuid, GenericTag))) then
             -- Spellcaster is an origin character or Player created a dark urge character when they weren't or a generic character when they were
             -- Ext.Utils.Print("Spellcaster origin is not the same as new character origin, cleaning up new character")
-            OpenMessageBox(SpellCaster, "Spellcaster origin is not the same as new character origin. If you had an extra character appear that won't go away, please reload your save. Otherwise, ignore this message.")
+            Osi.OpenMessageBox(SpellCaster, "Spellcaster origin is not the same as new character origin. If you had an extra character appear that won't go away, please reload your save. Otherwise, ignore this message.")
 
             return
             -- Mark for Cleanup
             -- CleanUp = true
         else
-            OpenMessageBox(uuid, "Appearance editing begun. Please wait for it to finish, you will receive another message.")
+            Osi.OpenMessageBox(uuid, "Appearance editing begun. Please wait for it to finish, you will receive another message.")
         end
 
-        Faction = GetFaction(SpellCaster)
+        Faction = Osi.GetFaction(SpellCaster)
 
         if not CleanUp then
             NewTav = uuid
             -- Do transfer operations
-            SetFaction(uuid, Faction)
-            CharacterMoveTo(uuid, SpellCaster, "", "", 1)
+            Osi.SetFaction(uuid, Faction)
+            Osi.CharacterMoveTo(uuid, SpellCaster, "", "", 1)
 
             -- Fix up statuses/spells that weren't auto-added
             local FixerSwitch = switch {
                 ["def281a4-3806-b279-8bda-87fcb283ff79"] = function ()
-                    if HasActiveStatus(SpellCaster, "COL_GITHZERAI_MIND_TECHNIQUE") == 1 and HasActiveStatus(uuid, "COL_GITHZERAI_MIND_TECHNIQUE") == 0 then
-                        ApplyStatus(uuid, "COL_GITHZERAI_MIND_TECHNIQUE", -1, 0, uuid)
+                    if Osi.HasActiveStatus(SpellCaster, "COL_GITHZERAI_MIND_TECHNIQUE") == 1 and Osi.HasActiveStatus(uuid, "COL_GITHZERAI_MIND_TECHNIQUE") == 0 then
+                        Osi.ApplyStatus(uuid, "COL_GITHZERAI_MIND_TECHNIQUE", -1, 0, uuid)
                     end
                 end,
                 ["14aec5bc-1013-4845-96ca-20722c5219e3"] = function ()
-                    if HasSpell(SpellCaster, "Shout_DarkUrge_Slayer") == 1 and HasSpell(uuid, "Shout_DarkUrge_Slayer") == 0 then
-                        AddSpell(uuid, "Shout_DarkUrge_Slayer", 1, 1)
+                    if Osi.HasSpell(SpellCaster, "Shout_DarkUrge_Slayer") == 1 and Osi.HasSpell(uuid, "Shout_DarkUrge_Slayer") == 0 then
+                        Osi.AddSpell(uuid, "Shout_DarkUrge_Slayer", 1, 1)
                     end
                 end,
                 ["79067d89-0cb1-47cf-a746-cc265948b527"] = function ()
-                    if HasPassive(SpellCaster, "CursedTome_FalseLife") == 1 and HasPassive(uuid, "CursedTome_FalseLife") == 0 then
-                        AddPassive(uuid, "CursedTome_FalseLife")
+                    if Osi.HasPassive(SpellCaster, "CursedTome_FalseLife") == 1 and Osi.HasPassive(uuid, "CursedTome_FalseLife") == 0 then
+                        Osi.AddPassive(uuid, "CursedTome_FalseLife")
                     end
                 end,
                 ["4e24982b-24d2-7107-a817-caa317dffd26"] = function ()
-                    if HasActiveStatus(SpellCaster, "CAMP_VOLO_ERSATZEYE") == 1 and HasActiveStatus(uuid, "CAMP_VOLO_ERSATZEYE") == 0 then
-                        ApplyStatus(uuid, "CAMP_VOLO_ERSATZEYE", -1, 0, uuid)
+                    if Osi.HasActiveStatus(SpellCaster, "CAMP_VOLO_ERSATZEYE") == 1 and Osi.HasActiveStatus(uuid, "CAMP_VOLO_ERSATZEYE") == 0 then
+                        Osi.ApplyStatus(uuid, "CAMP_VOLO_ERSATZEYE", -1, 0, uuid)
                     end
                 end,
-                -- ["d1de279e-be63-9787-474a-c001fc38dc24"] = function ()
-                --     if HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 1 and HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 0 then
-                --         ApplyStatus(uuid, "GLO_PIXIESHIELD", -1, 0, uuid)
-                --     end
-                -- end,
+                ["d1de279e-be63-9787-474a-c001fc38dc24"] = function ()
+                    if Osi.HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 1 and Osi.HasActiveStatus(SpellCaster, "GLO_PIXIESHIELD") == 0 then
+                        Osi.ApplyStatus(uuid, "GLO_PIXIESHIELD", -1, 0, uuid)
+                    end
+                end,
                 ["365dbc98-808e-4c11-90df-fdc92e30720f"] = function ()
-                    if HasSpell(SpellCaster, "Target_SurvivalInstinct") == 1 and HasSpell(uuid, "Target_SurvivalInstinct") == 0  then
-                        AddSpell(uuid, "Target_SurvivalInstinct", 1, 1)
+                    if Osi.HasSpell(SpellCaster, "Target_SurvivalInstinct") == 1 and Osi.HasSpell(uuid, "Target_SurvivalInstinct") == 0  then
+                        Osi.AddSpell(uuid, "Target_SurvivalInstinct", 1, 1)
                     end
                 end
             }
 
             for _, entry in pairs(Flags) do
-                if GetFlag(entry, SpellCaster) == 1 and GetFlag(entry, uuid) == 0 then
-                    SetFlag(entry, uuid, 0, 1)
+                if Osi.GetFlag(entry, SpellCaster) == 1 and Osi.GetFlag(entry, uuid) == 0 then
+                    Osi.SetFlag(entry, uuid, 0, 1)
 
                     FixerSwitch:case(entry)
-                elseif GetFlag(entry, SpellCaster) == 0 and GetFlag(entry, uuid) == 1 then
-                    SetFlag(entry, uuid, 0, 0)
+                elseif Osi.GetFlag(entry, SpellCaster) == 0 and Osi.GetFlag(entry, uuid) == 1 then
+                    Osi.SetFlag(entry, uuid, 0, 0)
 
                     FixerSwitch:case(entry)
                 else
-                    local GlobalFlag = GetFlag(entry, "NULL_00000000-0000-0000-0000-000000000000")
+                    local GlobalFlag = Osi.GetFlag(entry, "NULL_00000000-0000-0000-0000-000000000000")
 
                     if GlobalFlag == 1 then
                         FixerSwitch:case(entry)
@@ -637,29 +680,43 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
             end
 
             for _, entry in pairs(Tags) do
-                if IsTagged(SpellCaster, entry) == 1 and IsTagged(uuid, entry) == 0 then
+                if Osi.IsTagged(SpellCaster, entry) == 1 and Osi.IsTagged(uuid, entry) == 0 then
                     -- Ext.Utils.Print(tostring(entry))
-                    SetTag(uuid, entry)
+                    Osi.SetTag(uuid, entry)
 
                     -- Add Necromancy of Thay Speak With Dead
                     if (entry == "673cb6af-f12b-4d6e-faab-b81bf43c44ce") or (entry == "673cb6af-f12b-4d6e-abfa-1bb83cf4ce44") then
-                        if HasSpell(SpellCaster, "Target_GLO_DangerousBook_SpeakWd") == 1 and HasSpell(uuid, "Target_GLO_DangerousBook_SpeakWd") == 0 then
-                            AddSpell(uuid, "Target_GLO_DangerousBook_SpeakWd", 1, 1)
-                        end
+                        Osi.AddSpell(uuid, "Target_GLO_DangerousBook_SpeakWithDead", 1, 1)
                     end
                 end
             end
 
             -- Fix non-flagged passives (we need to do this better, try looking through every passive and ignore class/equipment ones?)
             for _, entry in pairs(HagHairs) do
-                if HasActiveStatus(SpellCaster, entry) == 1 and HasActiveStatus(uuid, entry) == 0 then
-                    ApplyStatus(uuid, entry, -1, 0, uuid)
+                if Osi.HasActiveStatus(SpellCaster, entry) == 1 and Osi.HasActiveStatus(uuid, entry) == 0 then
+                    Osi.ApplyStatus(uuid, entry, -1, 0, uuid)
                 end
             end
 
             for _, entry in pairs(SharMirrorStats) do
-                if HasPassive(SpellCaster, entry) == 1 and HasPassive(uuid, entry) == 0 then
-                    AddPassive(uuid, entry)
+                if Osi.HasPassive(SpellCaster, entry) == 1 and Osi.HasPassive(uuid, entry) == 0 then
+                    Osi.AddPassive(uuid, entry)
+                end
+            end
+
+            for _, entry in pairs(MissingPiecies) do
+                if entry[1] == "spell" then
+                    if Osi.HasSpell(SpellCaster, entry[2]) == 1 and Osi.HasSpell(uuid, entry[2]) == 0  then
+                        Osi.AddSpell(uuid, entry[2], 1, 1)
+                    end
+                elseif entry[1] == "status" then
+                    if Osi.HasActiveStatus(SpellCaster, entry[2]) == 1 and Osi.HasActiveStatus(uuid, entry[2]) == 0 then
+                        Osi.ApplyStatus(uuid, entry[2], -1, 0, uuid)
+                    end
+                else
+                    if Osi.HasPassive(SpellCaster, entry[2]) == 1 and Osi.HasPassive(uuid, entry[2]) == 0 then
+                        Osi.AddPassive(uuid, entry[2])
+                    end
                 end
             end
         end
@@ -702,7 +759,7 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function (uuid)
             end
 
             if key == DBQuerySize and not CleanUp then
-                TimerLaunch("APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS", 5000)
+                Osi.TimerLaunch("APPEARANCE_EDIT_CLEAR_FLAGGED_ITEMS", 5000)
             end
         end
 
