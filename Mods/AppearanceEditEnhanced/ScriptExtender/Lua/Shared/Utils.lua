@@ -618,12 +618,12 @@ function Utils.ShiftEquipmentVisual(character, reverse)
             if (copiedKey) then
                 if (not reverse) then
                     -- Utils.Debug("Copying " .. copiedKey)
-                    pcall(protectedSet, Ext.Entity.Get(character).ServerCharacter.Character.Template, copiedKey, val)
+                    pcall(protectedSet, Ext.Entity.Get(character).ServerCharacter.Template, copiedKey, val)
                 end
             else
                 if (reverse) then
                     -- Utils.Debug("Reversing " .. key)
-                    pcall(protectedSet, Ext.Entity.Get(character).ServerCharacter.Character.Template, key, val)
+                    pcall(protectedSet, Ext.Entity.Get(character).ServerCharacter.Template, key, val)
                 end
             end
         end
@@ -745,8 +745,8 @@ function Utils.PersistTemplateValues(character, copiedCharacter)
     local copiedEntity = Ext.Entity.Get(copiedCharacter)
 
     if (entity and copiedEntity) then
-        local Template = entity.ServerCharacter.Character.Template
-        local CopiedTemplate = copiedEntity.ServerCharacter.Character.Template
+        local Template = entity.ServerCharacter.Template
+        local CopiedTemplate = copiedEntity.ServerCharacter.Template
 
         if not PersistentVars["OriginalTemplates"][UUIDChar] then
             PersistentVars["OriginalTemplates"][UUIDChar] = {}

@@ -79,7 +79,7 @@ Ext.Osiris.RegisterListener("TemplateUseFinished", 4, "after", function(uuid, it
         if (Utils.IsOrigin(uuid)) then
             doOriginOperations(uuid)
 
-            Osi.QRY_StartDialog(Constants.DefaultUUIDs["MagicMirrorDialogue"], item, uuid)
+            Osi.QRY_StartDialog_Fixed(Constants.DefaultUUIDs["MagicMirrorDialogue"], item, uuid)
         end
     end
 end)
@@ -163,7 +163,7 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         if (Utils.IsOrigin(SpellCaster) or Utils.IsHireling(SpellCaster)) then
             PersistentVars["OriginCopiedChars"][SpellCaster] = uuid
             -- I'm worried this may cause issues but.... I can't think of any other workaround
-            Utils.CloneProxy(oldEntity.ServerCharacter.Character.Template, newEntity.ServerCharacter.Character.Template)
+            Utils.CloneProxy(oldEntity.ServerCharacter.Template, newEntity.ServerCharacter.Template)
             Utils.ShiftEquipmentVisual(SpellCaster, true)
         else
             -- Clone voice for Tavs
@@ -177,7 +177,7 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         oldEntity.CharacterCreationStats.SubRace = newEntity.CharacterCreationStats.SubRace
         oldEntity:Replicate("CharacterCreationStats")
 
-        oldEntity.ServerCharacter.Character.BaseVisual = newEntity.ServerCharacter.Character.BaseVisual
+        oldEntity.ServerCharacter.BaseVisual = newEntity.ServerCharacter.BaseVisual
 
         Utils.CopyAppearanceVisuals(SpellCaster)
 
