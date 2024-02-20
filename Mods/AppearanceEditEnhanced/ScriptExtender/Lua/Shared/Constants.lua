@@ -31,12 +31,13 @@ Constants.PersistedTemplateKeys = {
 }
 
 Constants.PersistedOriginTemplateKeys = {
+    -- "AIBounds",
     "ActivationGroupId",
-    "ActiveCharacterLightID",
     "AliveInventoryType",
     "AllowReceiveDecalWhenAnimated",
     "AnimationSetResourceID",
     "AnubisConfigName",
+    "AnubisNonPersistent",
     "AvoidTraps",
     "BloodSurfaceType",
     "BloodType",
@@ -52,7 +53,7 @@ Constants.PersistedOriginTemplateKeys = {
     "CastShadow",
     "CharacterVisualResourceID",
     "CollideWithCamera",
-    -- "CombatComponent", -- THIS IS THE PROBLEM RIGHT HERE
+    -- "CombatComponent",
     "CoverAmount",
     "CriticalHitType",
     "DeathEffect",
@@ -65,36 +66,32 @@ Constants.PersistedOriginTemplateKeys = {
     "DisableEquipping",
     "DisintegrateFX",
     "DisintegratedResourceID",
-    -- "DisplayName", -- Problem
+    -- "DisplayName",
     "Equipment",
     "EquipmentRace",
-    -- "EquipmentTypes", -- Problem
-    -- "ExcludeInDifficulty", -- Problem
+    -- "EquipmentTypes",
+    -- "ExcludeInDifficulty",
     "ExplodedResourceID",
     "ExplosionFX",
-    -- "FadeChildren", -- Problem
+    -- "FadeChildren",
     "FadeGroup",
     "Fadeable",
     "FileName",
-    "Flags",
     "FoleyLongResourceID",
     "FoleyMediumResourceID",
     "FoleyShortResourceID",
     "ForceLifetimeDeath",
     "GeneratePortrait",
+    "GlobalDeletedFlag",
     "GroupID",
-    "HasGameplayValue",
-    "HasParentModRelation",
     "HasPlayerApprovalRating",
     "HierarchyOnlyFade",
     "Icon",
     "Id",
     "InfluenceTreasureLevel",
     "InventoryType",
-    "IsDeleted",
     "IsDroppedOnDeath",
     "IsEquipmentLootable",
-    "IsGlobal",
     "IsLootable",
     "IsMovementEnabled",
     "IsPlayer",
@@ -114,7 +111,6 @@ Constants.PersistedOriginTemplateKeys = {
     "LevelName",
     "LevelOverride",
     "LightChannel",
-    "LightID",
     "MaxDashDistance",
     "MovementAcceleration",
     "MovementSpeedDash",
@@ -125,11 +121,12 @@ Constants.PersistedOriginTemplateKeys = {
     "MovementStepUpHeight",
     "MovementTiltToRemap",
     "Name",
-    -- "OnlyInDifficulty", -- Problem
+    -- "OnlyInDifficulty",
+    "ParentTemplateFlags",
     "ParentTemplateId",
     "PhysicsOpenTemplate",
     "PhysicsTemplate",
-    -- "PickingPhysicsTemplates", -- Problem
+    -- "PickingPhysicsTemplates",
     "ProbeLookAtOffset",
     "ProbeSpineAOffset",
     "ProbeSpineBOffset",
@@ -146,26 +143,28 @@ Constants.PersistedOriginTemplateKeys = {
     "SoundMovementStartEvent",
     "SoundMovementStopEvent",
     "SoundObjectIndex",
-    -- "SpeakerGroupList", -- Problem
+    -- "SpeakerGroupList",
     "SpellSet",
     "SpotSneakers",
     "Stats",
-    -- "StatusList", -- Problem
+    -- "StatusList",
     "SteeringSpeedCurveWithoutTransitions",
     "SteeringSpeedFallback",
     "SteeringSpeed_CastingCurve",
     "SteeringSpeed_MovingCurve",
     "TemplateName",
-    -- "Title", -- Problem
-    -- "TradeTreasures", -- Problem
-    -- "Transform", -- Problem
-    -- "Treasures", -- Problem
+    "TemplateType",
+    -- "Title",
+    -- "TradeTreasures",
+    -- "Transform",
+    -- "Treasures",
     "TrophyID",
     "TurningNodeAngle",
     "TurningNodeOffset",
     "UseOcclusion",
     "UseSoundClustering",
     "UseStandAtDestination",
+    "VFXScale",
     "VisualTemplate",
     "VocalAlertResourceID",
     "VocalAngryResourceID",
@@ -210,8 +209,7 @@ Constants.PersistedOriginTemplateKeys = {
     "WorldClimbingHeight",
     "WorldClimbingRadius",
     "WorldClimbingSpeed",
-    -- "field_50" -- Not a problem but I don't trust this
-    -- Works
+    -- "field_8"
 }
 
 -- In seconds

@@ -664,10 +664,10 @@ function Utils.CopyAppearanceVisuals(uuid)
             Entity.AppearanceOverride.Visual.AdditionalChoices = Constants.DefaultAdditionalChoices
         end
 
-        Utils.CloneProxy(Entity.AppearanceOverride.Visual, Entity.CharacterCreationAppearance);
+        Utils.CloneProxy(Entity.AppearanceOverride.Visual, Entity.CharacterCreationAppearance)
 
-        Utils.CloneProxy(Entity.AppearanceOverride.Visual.Visuals, Entity.CharacterCreationAppearance.Visuals);
-        Utils.CloneProxy(Entity.AppearanceOverride.Visual.Elements, Entity.CharacterCreationAppearance.Elements);
+        Utils.CloneProxy(Entity.AppearanceOverride.Visual.Visuals, Entity.CharacterCreationAppearance.Visuals)
+        Utils.CloneProxy(Entity.AppearanceOverride.Visual.Elements, Entity.CharacterCreationAppearance.Elements)
 
         if (Entity.GameObjectVisual.Type ~= 2 and PersistentVars["OriginalTemplates"]
                 and PersistentVars["OriginalTemplates"][UUIDChar]
@@ -754,8 +754,12 @@ function Utils.PersistTemplateValues(character, copiedCharacter)
 
         if (Utils.IsOrigin(UUIDChar) or Utils.IsHireling(UUIDChar)) then
             for _, k in pairs(Constants.PersistedOriginTemplateKeys) do
-                PersistentVars["OriginalTemplates"][UUIDChar][k] = Template[k]
-                PersistentVars["OriginalTemplates"][UUIDChar]["Copied" .. k] = CopiedTemplate[k]
+                -- Credit to mykola2013 on Nexus for the idea
+                local success = pcall(function() return Template[k] end)
+                if success then
+                    PersistentVars["OriginalTemplates"][UUIDChar][k] = Template[k]
+                    PersistentVars["OriginalTemplates"][UUIDChar]["Copied" .. k] = CopiedTemplate[k]
+                end
 
                 -- Make sure we keep the important pieces
                 PersistentVars["OriginalTemplates"][UUIDChar]["CopiedStats"] = Template.Stats

@@ -177,7 +177,8 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         oldEntity.CharacterCreationStats.SubRace = newEntity.CharacterCreationStats.SubRace
         oldEntity:Replicate("CharacterCreationStats")
 
-        oldEntity.ServerCharacter.BaseVisual = newEntity.ServerCharacter.BaseVisual
+
+        oldEntity.ServerCharacter.BaseVisual = newEntity.ServerCharacter.BaseVisual -- This does nothing rn, this might be the culprit
 
         Utils.CopyAppearanceVisuals(SpellCaster)
 
