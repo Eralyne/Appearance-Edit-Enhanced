@@ -69,7 +69,7 @@ end
 
 local function CloneTemplateEntities()
     for origin, copy in pairs(PersistentVars["OriginCopiedChars"]) do
-        Utils.CloneProxy(Ext.Entity.Get(origin).ServerCharacter.Character.Template, Ext.Entity.Get(copy).ServerCharacter.Character.Template)
+        Utils.CloneProxy(Ext.Entity.Get(origin).ServerCharacter.Template, Ext.Entity.Get(copy).ServerCharacter.Template)
     end
 
     for char, _ in pairs(PersistentVars["OriginalTemplates"]) do

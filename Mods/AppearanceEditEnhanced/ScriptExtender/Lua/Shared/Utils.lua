@@ -257,12 +257,7 @@ function Utils.TempClone(old, new)
 end
 
 function Utils.CloneProxy(old, new)
-    if (Ext.Utils.Version() > 9) then
-        TryToReserializeObject(old, new)
-    else
-        Utils.DeepClean(old)
-        Utils.DeepWrite(old, new)
-    end
+    TryToReserializeObject(old, new)
 end
 
 function Utils.CloneEntityEntry(old, new, entry)
@@ -655,7 +650,7 @@ function Utils.CopyAppearanceVisuals(uuid)
 
         -- I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers, I hate timers
         pcall(Osi.ObjectTimerLaunch, UUIDChar, "AEE_Override_Replication", 1000)
-    else
+    elseif (Entity.CharacterCreationAppearance) then
         if (Utils.Size(Entity.AppearanceOverride.Visual.Elements) == 0) then
             Entity.AppearanceOverride.Visual.Elements = Constants.DefaultElements
         end
