@@ -12,7 +12,7 @@ local function doOriginOperations(uuid)
 
     -- Assign character creation entity
     local originEntity = Ext.Entity.Get(uuid).CharacterCreationAppearance
-    if (Constants.OriginCharacterCreationAppearances[uuid] and (originEntity.EyeColor == Constants.DefaultUUIDs["NullTemplate"] or originEntity.SkinColor == Constants.DefaultUUIDs["NullTemplate"])) then
+    if (Constants.OriginCharacterCreationAppearances[uuid] and originEntity and (originEntity.EyeColor == Constants.DefaultUUIDs["NullTemplate"] or originEntity.SkinColor == Constants.DefaultUUIDs["NullTemplate"])) then
         Utils.TempClone(originEntity, Constants.OriginCharacterCreationAppearances[uuid])
         Ext.Entity.Get(uuid):Replicate("CharacterCreationAppearance")
     end
