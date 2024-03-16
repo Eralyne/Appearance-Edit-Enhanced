@@ -55,13 +55,15 @@ Ext.Entity.Subscribe("GameObjectVisual", function(entity, _, _)
     local success, _ = pcall(Utils.TryGetProxy, entity, "CharacterCreationAppearance")
 
     if (success) then
-        if (GOV.Type == 4 and PersistentVars["OriginalTemplates"]
+        if (PersistentVars["OriginalTemplates"]
                 and PersistentVars["OriginalTemplates"][UUIDChar]
                 and GOV.RootTemplateId == PersistentVars["OriginalTemplates"][UUIDChar]["CopiedId"]) then
-            entity.GameObjectVisual.Type = 2
-            Utils.CopyAppearanceVisuals(UUIDChar)
-        elseif (GOV.Type == 0 or GOV.Type == 1) then
-            Utils.CopyAppearanceVisuals(UUIDChar)
+            if (GOV.Type == 4) then
+                entity.GameObjectVisual.Type = 2
+                Utils.CopyAppearanceVisuals(UUIDChar)
+            elseif (GOV.Type == 0 or GOV.Type == 1) then
+                Utils.CopyAppearanceVisuals(UUIDChar)
+            end
         end
     end
 end)
