@@ -22,9 +22,9 @@ end
 
 local function SaveCleanUp()
     -- Fix spells
-    for player, _ in pairs(PersistentVars["SpellOwners"]) do
-        RemoveSpellFromCharacter(player, false)
-    end
+    -- for player, _ in pairs(PersistentVars["SpellOwners"]) do
+    --     RemoveSpellFromCharacter(player, false)
+    -- end
 
     FixAppearanceTemplates()
 end

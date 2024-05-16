@@ -147,7 +147,7 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
 
         Osi.Transform(SpellCaster, uuid, "6f45d3b8-fa22-4bae-919c-9c2757bff470")
         Utils.FixREALLYTags(SpellCaster, uuid)
-        -- Can't clear Genital tag properly :()
+        -- Can't clear Genital tag properly :(
         -- Utils.FixGenitalTags(SpellCaster, uuid)
 
         -- Utils.Debug("CopiedTav: " .. uuid)
