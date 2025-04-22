@@ -1,4 +1,4 @@
----@diagnostic disable: undefined-global
+---@diagnostic disable: undefined-global, undefined-field
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -279,26 +279,28 @@ end
 
 -- Probably only works on Container Spells
 -- TODO: Add to AddedSpells when replication gets added
-function Utils.AddSpellToSpellbook(char, spell)
+function Utils.AddSpellToSpellbook(char, spell, source)
     local CharEntity = Ext.Entity.Get(char)
     local SpellBook = CharEntity["SpellBook"]
-    -- local AddedSpells = CharEntity["AddedSpells"]
+    local AddedSpells = CharEntity["AddedSpells"]
 
-    -- local TemplateAddedSpells = {
-    --     ContainerSpell = "",
-    --     CooldownType = "Default",
-    --     ItemHandle = nil,
-    --     SelectionType = "Singular",
-    --     SpellCastingAbility = "None",
-    --     SpellId = {
-    --         OriginatorPrototype = spell,
-    --         ProgressionSource = "00000000-0000-0000-0000-000000000000",
-    --         SourceType = "Osiris"
-    --     },
-    --     SpellUUID = "00000000-0000-0000-0000-000000000000",
-    --     field_29 = 0,
-    --     field_48 = 0
-    -- }
+    local TemplateAddedSpells = {
+        ContainerSpell = "",
+        CooldownType = "Default",
+        ItemHandle = nil,
+        SelectionType = "Singular",
+        SpellCastingAbility = "None",
+        SpellId = {
+            OriginatorPrototype = spell,
+            ProgressionSource = "00000000-0000-0000-0000-000000000000",
+            SourceType = source
+        },
+        SpellUUID = "00000000-0000-0000-0000-000000000000",
+        field_29 = 0,
+        field_48 = 0
+    }
+
+    AddedSpells.Spells[#AddedSpells.Spells + 1] = TemplateAddedSpells
 
     local TemplateSpellBook = {
         CooldownType = "Default", -- Modify this to the properly CooldownType
@@ -306,7 +308,7 @@ function Utils.AddSpellToSpellbook(char, spell)
             OriginatorPrototype = spell,
             ProgressionSource = "00000000-0000-0000-0000-000000000000",
             Prototype = spell,
-            SourceType = "Osiris"
+            SourceType = source
         },
         SpellCastingAbility = "None",
         SpellUUID = "00000000-0000-0000-0000-000000000000",
@@ -319,6 +321,23 @@ function Utils.AddSpellToSpellbook(char, spell)
     SpellBook.Spells[#SpellBook.Spells + 1] = TemplateSpellBook
 
     CharEntity:Replicate("SpellBook")
+    CharEntity:Replicate("AddedSpells")
+end
+
+function Utils.AddSpellToSpellBookPrepares(char, spell, sourceType, progressionSource)
+    local CharEntity = Ext.Entity.Get(char)
+    local SpellBookPrepares = CharEntity["SpellBookPrepares"]
+
+    local TemplateSpell = {
+        OriginatorPrototype = spell,
+        ProgressionSource = progressionSource,
+        Source = "00000000-0000-0000-0000-000000000000",
+        SourceType = sourceType
+    }
+
+    SpellBookPrepares.PreparedSpells[#SpellBookPrepares.PreparedSpells + 1] = TemplateSpell
+
+    CharEntity:Replicate("SpellBookPrepares")
     -- CharEntity:Replicate("AddedSpells")
 end
 
@@ -506,7 +525,7 @@ end
 -- Move spell to a new persisted slot, clear persistantChar after
 function Utils.MoveSpellToSlot(character)
     local UUIDChar = Utils.GetGUID(character)
-    local persistantChar = PersistentVars["SpellOwners"][UUIDChar]
+    local persistantChar = ModVars["SpellOwners"][UUIDChar]
 
     if (persistantChar) then
         local BarIndex = persistantChar["BarIndex"]
@@ -549,7 +568,8 @@ function Utils.MoveSpellToSlot(character)
             end
 
             if (Removed) then
-                PersistentVars["SpellOwners"][UUIDChar] = {}
+                ModVars["SpellOwners"][UUIDChar] = {}
+                ModVars["SpellOwners"] = ModVars["SpellOwners"]
                 Ext.Entity.Get(character):Replicate("HotbarContainer")
             end
         end
@@ -580,8 +600,10 @@ function Utils.RemoveCharacter(character)
     local UUIDChar = Utils.GetGUID(character)
 
     -- Remove our custom spells
-    if (PersistentVars["SpellOwners"][UUIDChar]) then
-        PersistentVars["SpellOwners"][UUIDChar] = nil
+    if (ModVars["SpellOwners"][UUIDChar]) then
+        ModVars["SpellOwners"][UUIDChar] = nil
+
+        ModVars["SpellOwners"] = ModVars["SpellOwners"]
     end
 
     Osi.RemoveSpell(UUIDChar, Constants.CustomSpells["SpellsContainer"], 1)
@@ -606,8 +628,8 @@ function Utils.ShiftEquipmentVisual(character, reverse)
 
     local Entity = Ext.Entity.Get(character)
 
-    if (Entity and PersistentVars["OriginalTemplates"][UUIDChar]) then
-        for key, val in pairs(PersistentVars["OriginalTemplates"][UUIDChar]) do
+    if (Entity and ModVars["OriginalTemplates"][UUIDChar]) then
+        for key, val in pairs(ModVars["OriginalTemplates"][UUIDChar]) do
             local copiedKey = Utils.MatchAfter(key, "Copied")
 
             if (copiedKey) then
@@ -622,7 +644,7 @@ function Utils.ShiftEquipmentVisual(character, reverse)
                 end
             end
         end
-    elseif (PersistentVars["OriginalTemplates"] and not PersistentVars["OriginalTemplates"][UUIDChar]) then
+    elseif (ModVars["OriginalTemplates"] and not ModVars["OriginalTemplates"][UUIDChar]) then
         -- Utils.Warn("Your persistant vars are GONE. If you have a resculpted character, resculpt again or else you will have ISSUES.")
     end
 end
@@ -664,9 +686,9 @@ function Utils.CopyAppearanceVisuals(uuid)
         Utils.CloneProxy(Entity.AppearanceOverride.Visual.Visuals, Entity.CharacterCreationAppearance.Visuals)
         Utils.CloneProxy(Entity.AppearanceOverride.Visual.Elements, Entity.CharacterCreationAppearance.Elements)
 
-        if (Entity.GameObjectVisual.Type ~= 2 and PersistentVars["OriginalTemplates"]
-                and PersistentVars["OriginalTemplates"][UUIDChar]
-                and Entity.GameObjectVisual.RootTemplateId == PersistentVars["OriginalTemplates"][UUIDChar]["CopiedId"]) then
+        if (Entity.GameObjectVisual.Type ~= 2 and ModVars["OriginalTemplates"]
+                and ModVars["OriginalTemplates"][UUIDChar]
+                and Entity.GameObjectVisual.RootTemplateId == ModVars["OriginalTemplates"][UUIDChar]["CopiedId"]) then
             Entity.GameObjectVisual.Type = 2
         end
 
@@ -743,8 +765,11 @@ function Utils.PersistTemplateValues(character, copiedCharacter)
         local Template = entity.ServerCharacter.Template
         local CopiedTemplate = copiedEntity.ServerCharacter.Template
 
-        if not PersistentVars["OriginalTemplates"][UUIDChar] then
-            PersistentVars["OriginalTemplates"][UUIDChar] = {}
+        if not ModVars["OriginalTemplates"][UUIDChar] then
+            ModVars["OriginalTemplates"][UUIDChar] = {}
+
+            -- Dirty the Variable
+            ModVars["OriginalTemplates"] = ModVars["OriginalTemplates"]
         end
 
         if (Utils.IsOrigin(UUIDChar) or Utils.IsHireling(UUIDChar)) then
@@ -752,19 +777,25 @@ function Utils.PersistTemplateValues(character, copiedCharacter)
                 -- Credit to mykola2013 on Nexus for the idea
                 local success = pcall(function() return Template[k] end)
                 if success then
-                    PersistentVars["OriginalTemplates"][UUIDChar][k] = Template[k]
-                    PersistentVars["OriginalTemplates"][UUIDChar]["Copied" .. k] = CopiedTemplate[k]
+                    ModVars["OriginalTemplates"][UUIDChar][k] = Template[k]
+                    ModVars["OriginalTemplates"][UUIDChar]["Copied" .. k] = CopiedTemplate[k]
                 end
 
                 -- Make sure we keep the important pieces
-                PersistentVars["OriginalTemplates"][UUIDChar]["CopiedStats"] = Template.Stats
-                PersistentVars["OriginalTemplates"][UUIDChar]["CopiedGeneratePortrait"] = Template.GeneratePortrait
-                PersistentVars["OriginalTemplates"][UUIDChar]["CopiedIcon"] = Template.Icon
+                ModVars["OriginalTemplates"][UUIDChar]["CopiedStats"] = Template.Stats
+                ModVars["OriginalTemplates"][UUIDChar]["CopiedGeneratePortrait"] = Template.GeneratePortrait
+                ModVars["OriginalTemplates"][UUIDChar]["CopiedIcon"] = Template.Icon
+
+                -- Dirty the Variable
+                ModVars["OriginalTemplates"] = ModVars["OriginalTemplates"]
             end
         else
             for _, k in pairs(Constants.PersistedTemplateKeys) do
-                PersistentVars["OriginalTemplates"][UUIDChar][k] = Template[k]
-                PersistentVars["OriginalTemplates"][UUIDChar]["Copied" .. k] = CopiedTemplate[k]
+                ModVars["OriginalTemplates"][UUIDChar][k] = Template[k]
+                ModVars["OriginalTemplates"][UUIDChar]["Copied" .. k] = CopiedTemplate[k]
+
+                -- Dirty the Variable
+                ModVars["OriginalTemplates"] = ModVars["OriginalTemplates"]
             end
         end
     end
@@ -799,7 +830,7 @@ function Utils.PersistHotBarSlot(character)
                 end
             end
 
-            PersistentVars["SpellOwners"][UUIDChar] = {
+            ModVars["SpellOwners"][UUIDChar] = {
                 ["BarIndex"] = barIndex,
                 ["BarRemoved"] = barRemoved,
                 ["SlotIndex"] = slotIndex,
@@ -807,7 +838,7 @@ function Utils.PersistHotBarSlot(character)
             }
         end
     else
-        PersistentVars["SpellOwners"][UUIDChar] = {
+        ModVars["SpellOwners"][UUIDChar] = {
             ["Slot"] = {
                 ["SpellId"] = {
                     ["Prototype"] = Constants.CustomSpells["SpellsContainer"]
@@ -851,3 +882,11 @@ Ext.Osiris.RegisterListener("ObjectTimerFinished", 2, "after", function(uuid, ev
         Utils.CopyAppearanceVisuals(uuid)
     end
 end)
+
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                 ModVar Getters/Setters                                      --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+-- TODO: Add these....

@@ -1,12 +1,28 @@
----@diagnostic disable: undefined-global
+---@diagnostic disable: undefined-global, undefined-field
+
+-- Retrieve Mod Variables --
+local function LoadModVars()
+    ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
+    for k, _ in pairs(PersistentVarsTemplate) do
+        if (not ModVars[k]) then
+            ModVars[k] = {}
+        end
+    end
+
+    Ext.Vars.SyncModVariables(Constants.ModUUID)
+end
 
 local function RemoveSpellFromCharacter(character, clearPersistantVars)
     local UUIDChar = Utils.GetGUID(character)
 
+    ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
     Osi.RemoveSpell(UUIDChar, Constants.CustomSpells["SpellsContainer"], 1)
 
     if (clearPersistantVars) then
-        PersistentVars["SpellOwners"][UUIDChar] = nil
+        ModVars["SpellOwners"][UUIDChar] = nil
+        ModVars["SpellOwners"] = ModVars["SpellOwners"]
     else
         Utils.PersistHotBarSlot(UUIDChar)
     end
@@ -15,14 +31,15 @@ end
 local function FixAppearanceTemplates()
     -- Fix templates to prevent PROBLEMS
     -- This is a backup in-case they load/close game during mirror
-    for char, _ in pairs(PersistentVars["OriginalTemplates"]) do
+    for char, _ in pairs(ModVars["OriginalTemplates"]) do
         Utils.ShiftEquipmentVisual(char, true)
     end
 end
 
 local function SaveCleanUp()
+    LoadModVars()
     -- Fix spells
-    -- for player, _ in pairs(PersistentVars["SpellOwners"]) do
+    -- for player, _ in pairs(ModVars["SpellOwners"]) do
     --     RemoveSpellFromCharacter(player, false)
     -- end
 
@@ -36,7 +53,7 @@ local function GiveSpellToCharacter(character)
     local Spell = Constants.CustomSpells["SpellsContainer"]
 
     if (Osi.HasSpell(UUIDChar, Spell) == 0) then
-        local PersistantChar = PersistentVars["SpellOwners"][UUIDChar]
+        local PersistantChar = ModVars["SpellOwners"][UUIDChar]
 
         if (PersistantChar and PersistantChar["Slot"]) then
             -- Utils.Debug("Adding spells to " .. UUIDChar)
@@ -46,14 +63,14 @@ local function GiveSpellToCharacter(character)
 
             -- Spell doesn't show up on Hotbar in-time to check entity
             -- We don't need slot yet, we just need a SpellOwner
-            PersistentVars["SpellOwners"][UUIDChar] = {}
+            ModVars["SpellOwners"][UUIDChar] = {}
         end
     end
 end
 
 local function RestoreSpells()
-    if (Utils.Size(PersistentVars["SpellOwners"]) > 0) then
-        for player, _ in pairs(PersistentVars["SpellOwners"]) do
+    if (Utils.Size(ModVars["SpellOwners"]) > 0) then
+        for player, _ in pairs(ModVars["SpellOwners"]) do
             GiveSpellToCharacter(player)
         end
     else
@@ -68,17 +85,19 @@ local function RestoreSpells()
 end
 
 local function CloneTemplateEntities()
-    for origin, copy in pairs(PersistentVars["OriginCopiedChars"]) do
+    -- TODO: Unironically, I don't think this even does anything
+    for origin, copy in pairs(ModVars["OriginCopiedChars"]) do
         Utils.CloneProxy(Ext.Entity.Get(origin).ServerCharacter.Template, Ext.Entity.Get(copy).ServerCharacter.Template)
     end
 
-    for char, _ in pairs(PersistentVars["OriginalTemplates"]) do
+    for char, _ in pairs(ModVars["OriginalTemplates"]) do
         Utils.ShiftEquipmentVisual(char, true)
         Utils.CopyAppearanceVisuals(char)
     end
 end
 
 local function LoadedActions()
+    LoadModVars()
     RestoreSpells()
     CloneTemplateEntities()
 end

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <contentList>
-  <content contentuid="hbf6dc83dgcc9eg46a3g90ffg6a6c9dffcc28" version="1">Edycja wyglądu</content>
-  <content contentuid="h8b70b6beg5e7fg4a81g8226g8c87dedea343" version="1">Zobacz różne opcje modyfikowania formularza.</content>
-  <content contentuid="h08bcba0dg42eeg40efga43cg46d521f6618d" version="1">Przemodeluj</content>
-  <content contentuid="h90eef894g7cc7g476dg808cg986a12ed4048" version="1">Marzysz o nowej postaci? Stwórz siebie na nowo takim, jakim naprawdę chcesz być.</content>
-  <content contentuid="hc5a602b7g2254g4cfcg9152gfbc18144bcf7" version="1">Przespecializuj</content>
-  <content contentuid="h0fe56a09g78b5g4fedgbe0ag5dd11eb6692c" version="1">Skorzystaj z mocy Zapomnianego, aby  przespecializować się na tego kim miałeś być.</content>
-  <content contentuid="h655d62ddg3506g44afga861g7d137292f699" version="1">Lustro</content>
-  <content contentuid="h8feabb0cga5d7g471dga807g7989d3e4c1c5" version="1">Przywołaj moc Magicznego Lustra z daleka.</content>
+	<content contentuid="hbf6dc83dgcc9eg46a3g90ffg6a6c9dffcc28" version="1">Edycja wyglądu</content>
+	<content contentuid="h8b70b6beg5e7fg4a81g8226g8c87dedea343" version="1">Zobacz różne opcje modyfikowania formularza.</content>
+	<content contentuid="h08bcba0dg42eeg40efga43cg46d521f6618d" version="1">Przemodeluj</content>
+	<content contentuid="h90eef894g7cc7g476dg808cg986a12ed4048" version="1">Marzysz o nowej postaci? Stwórz siebie na nowo takim, jakim naprawdę chcesz być.</content>
+	<content contentuid="hc5a602b7g2254g4cfcg9152gfbc18144bcf7" version="1">Przespecializuj</content>
+	<content contentuid="h0fe56a09g78b5g4fedgbe0ag5dd11eb6692c" version="1">Skorzystaj z mocy Zapomnianego, aby  przespecializować się na tego kim miałeś być.</content>
+	<content contentuid="h655d62ddg3506g44afga861g7d137292f699" version="1">Lustro</content>
+	<content contentuid="h8feabb0cga5d7g471dga807g7989d3e4c1c5" version="1">Przywołaj moc Magicznego Lustra z daleka.</content>
+	<content contentuid="hfc951284f1f2ac11f0h9cd2e0242ac120002" version="1">Przywrócić</content>
+  <content contentuid="h127e1564e1f2bc11f0h9cd2d0242ac120002" version="1">Wróć do formy, którą kiedyś byłeś. Działa tylko na postaciach Origin.</content>
 </contentList>

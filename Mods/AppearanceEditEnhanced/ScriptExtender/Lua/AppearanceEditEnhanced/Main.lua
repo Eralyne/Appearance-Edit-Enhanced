@@ -1,4 +1,4 @@
----@diagnostic disable: undefined-global
+---@diagnostic disable: undefined-global, undefined-field
 
 -- TODO: Move to utils
 local function doOriginOperations(uuid)
@@ -29,6 +29,8 @@ local SaveLoaded = false
 local CharacterCreated
 
 local SpellCaster
+
+local TempChar
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -63,6 +65,51 @@ Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function(uuid, name, _, _,
 
             Osi.StartCharacterCreation()
             Utils.Info("Character Creation Screen shown through " .. Constants.CustomSpells["Resculpt"])
+        elseif name == Constants.CustomSpells["Restore"] then
+            if (Utils.IsOrigin(uuid)) then
+                local entity = Ext.Entity.Get(uuid)
+
+                entity.CharacterCreationStats.BodyType = Constants["OriginCharacterCreationStats"][uuid].BodyType
+                entity.CharacterCreationStats.BodyShape = Constants["OriginCharacterCreationStats"][uuid].BodyShape
+                entity.CharacterCreationStats.Race = Constants["OriginCharacterCreationStats"][uuid].Race
+                entity.CharacterCreationStats.SubRace = Constants["OriginCharacterCreationStats"][uuid].SubRace
+                entity:Replicate("CharacterCreationStats")
+
+                Utils.ShiftEquipmentVisual(uuid, true)
+                Osi.RemoveTransforms(uuid)
+
+                Utils.TempClone(entity.CharacterCreationAppearance, Constants.OriginCharacterCreationAppearances[uuid])
+                entity:Replicate("CharacterCreationAppearance")
+
+                ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
+                if (ModVars.CantripSpell and ModVars.CantripSpell[uuid] and Osi.HasSpell(SpellCaster, ModVars.CantripSpell[uuid])) then
+                    Osi.RemoveSpell(uuid, ModVars.CantripSpell[uuid])
+                    ModVars.CantripSpell[uuid] = nil
+                    ModVars.CantripSpell = ModVars.CantripSpell
+                end
+
+                if (ModVars.OriginCopiedChars and ModVars.OriginCopiedChars[uuid]) then
+                    ModVars.OriginCopiedChars[uuid] = nil
+                    ModVars.OriginCopiedChars = ModVars.OriginCopiedChars
+                end
+
+                if (ModVars.OriginalTemplates and ModVars.OriginalTemplates[Utils.GetGUID(uuid)]) then
+                    ModVars.OriginalTemplates[Utils.GetGUID(uuid)] = nil
+                    ModVars.OriginalTemplates = ModVars.OriginalTemplates
+                end
+
+                if (ModVars.NewTemplateIcon and ModVars.NewTemplateIcon[uuid]) then
+                    ModVars.NewTemplateIcon[uuid] = nil
+                    ModVars.NewTemplateIcon = ModVars.NewTemplateIcon
+                end
+
+                Ext.Vars.SyncModVariables(Constants.ModUUID)
+
+                Osi.OpenMessageBox(uuid, "Remember to use Mirror to fix portrait and save/load to fix racial traits.")
+
+                Utils.Info("Appearance restored of " .. entity.CharacterCreationStats.Name)
+            end
         end
     end
 end)
@@ -73,7 +120,7 @@ end)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
--- Enable origins/hirelings to use the mirror
+-- Enable origins to use the mirror
 Ext.Osiris.RegisterListener("TemplateUseFinished", 4, "after", function(uuid, itemroot, item, _)
     if (itemroot == Constants.DefaultUUIDs["MagicMirrorTemplate"] and Osi.IsTagged(uuid, Constants.DefaultUUIDs["FullCeramorphTag"]) == 0) then
         if (Utils.IsOrigin(uuid)) then
@@ -81,6 +128,12 @@ Ext.Osiris.RegisterListener("TemplateUseFinished", 4, "after", function(uuid, it
 
             Osi.QRY_StartDialog_Fixed(Constants.DefaultUUIDs["MagicMirrorDialogue"], item, uuid)
         end
+    end
+
+    ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
+    if (ModVars["NewTemplateIcon"][uuid]) then
+        Ext.Entity.Get(uuid).ServerCharacter.Template.Icon = ModVars["NewTemplateIcon"][uuid]
     end
 end)
 
@@ -107,8 +160,6 @@ Ext.Osiris.RegisterListener("CharacterCreationFinished", 0, "before", function()
     if SaveLoaded then
         CharacterCreated = true
 
-        -- Osi.TimerLaunch("APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED", 500)
-
         -- Remove Daisies
         -- TODO: Potentially do this better?
         for _, entry in pairs(Osi["DB_GLO_DaisyAwaitsAvatar"]:Get(nil, nil)) do
@@ -125,6 +176,8 @@ end)
 
 Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
     if SaveLoaded and CharacterCreated then
+        ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
         -- TODO: Add object timer here to do work so we can free up Spellcaster
 
         -- Not generic, clean up and do nothing
@@ -137,6 +190,9 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         elseif (Osi.IsTagged(uuid, Constants.DefaultUUIDs["GenericTag"]) == 0) then
             -- Another char was activated but it wasn't one made in CC
             -- Likely we have a multiplayer situation, one exited early with DUrge while other is still editing
+            return
+        elseif (Utils.IsHireling(uuid)) then
+            -- Hireling has been created. They have the Generic tag.... WE DON'T WANT TO TURN INTO HIRELINGS
             return
         end
 
@@ -161,7 +217,11 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
 
         -- Do special work for origins/hirelings
         if (Utils.IsOrigin(SpellCaster) or Utils.IsHireling(SpellCaster)) then
-            PersistentVars["OriginCopiedChars"][SpellCaster] = uuid
+            ModVars["OriginCopiedChars"][SpellCaster] = uuid
+
+            -- Dirty variable
+            ModVars["OriginCopiedChars"] = ModVars["OriginCopiedChars"]
+
             -- I'm worried this may cause issues but.... I can't think of any other workaround
             Utils.CloneProxy(oldEntity.ServerCharacter.Template, newEntity.ServerCharacter.Template)
             Utils.ShiftEquipmentVisual(SpellCaster, true)
@@ -170,13 +230,17 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
             Utils.CloneEntityEntry(oldEntity, newEntity, "Voice")
         end
 
+        ModVars["NewTemplateIcon"][SpellCaster] = newEntity.ServerCharacter.Template.Icon
+
+        -- Dirty variable
+        ModVars["NewTemplateIcon"] = ModVars["NewTemplateIcon"]
+
         -- Extra replications that we want to only partially copy
         oldEntity.CharacterCreationStats.BodyType = newEntity.CharacterCreationStats.BodyType
         oldEntity.CharacterCreationStats.BodyShape = newEntity.CharacterCreationStats.BodyShape
         oldEntity.CharacterCreationStats.Race = newEntity.CharacterCreationStats.Race
         oldEntity.CharacterCreationStats.SubRace = newEntity.CharacterCreationStats.SubRace
         oldEntity:Replicate("CharacterCreationStats")
-
 
         oldEntity.ServerCharacter.BaseVisual = newEntity.ServerCharacter.BaseVisual -- This does nothing rn, this might be the culprit
 
@@ -185,24 +249,54 @@ Ext.Osiris.RegisterListener("Activated", 1, "before", function(uuid)
         -- Remove
         Utils.RemoveCharacter(uuid)
 
+        TempChar = uuid
+
+        Osi.TimerLaunch("APPEARANCE_EDIT_RESCULPT_FINISHED", 1000)
+
         Osi.MakePlayerActive(SpellCaster)
     end
 end)
 
 -- Ext.Osiris.RegisterListener("Died", 1, "after", function(character)
---     if (Utils.IsOrigin(character) and PersistentVars["OriginCopiedChars"][character]) then
---         PersistentVars["OriginCopiedChars"][character] = nil
---         PersistentVars["OriginalTemplates"][Utils.GetGUID(character)] = nil
+--     if (Utils.IsOrigin(character) and ModVars["OriginCopiedChars"][character]) then
+--         ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+--         ModVars["OriginCopiedChars"][character] = nil
+--         ModVars["OriginalTemplates"][Utils.GetGUID(character)] = nil
+--
+--         -- Dirty Variables
+--         ModVars["OriginCopiedChars"] = ModVars["OriginCopiedChars"]
+--         ModVars["OriginalTemplates"] = ModVars["OriginalTemplates"]
 --     end
 -- end)
+
+Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(event)
+    if event == "APPEARANCE_EDIT_RESCULPT_FINISHED" then
+        if SaveLoaded and SpellCaster and TempChar then
+            ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
+            local copiedEntity = Ext.Entity.Get(TempChar)
+
+            -- Clone Racial Cantrip
+            for _, s in pairs(copiedEntity.SpellBookPrepares.PreparedSpells) do
+                if (s.SourceType == "Progression2") then
+                    -- Utils.AddSpellToSpellBookPrepares(SpellCaster, s.OriginatorPrototype, s.SourceType, s.ProgressionSource)
+                    -- Utils.AddSpellToSpellbook(SpellCaster, s.OriginatorPrototype, s.SourceType)
+
+                    if (ModVars.CantripSpell[SpellCaster] and Osi.HasSpell(SpellCaster, ModVars.CantripSpell[SpellCaster])) then
+                        Osi.RemoveSpell(SpellCaster, ModVars.CantripSpell[SpellCaster])
+                    end
+
+                    Osi.AddSpell(SpellCaster, s.OriginatorPrototype)
+
+                    ModVars.CantripSpell[SpellCaster] = s.OriginatorPrototype
+                    ModVars.CantripSpell = ModVars.CantripSpell
+                end
+            end
+
+            TempChar = nil
+        end
+    end
+end)
+
 
 -- TODO: Allow resetting origin appearance back to original
--- Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(event)
---     if event == "APPEARANCE_EDIT_ORIGIN_EDIT_FINISHED" then
---         if SaveLoaded and CharacterCreated and not CharacterActivated then
---             CharacterCreated = false
-
---             Ext.Utils.Print("Origin Edited")
---         end
---     end
--- end)

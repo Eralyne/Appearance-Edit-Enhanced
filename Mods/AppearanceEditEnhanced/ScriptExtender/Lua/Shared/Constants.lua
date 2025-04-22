@@ -219,7 +219,8 @@ Constants.CustomSpells = {
     ["SpellsContainer"] = "AE_Spell_Container",
     ["Resculpt"] = "Shout_Open_Creation",
     ["Mirror"] = "Shout_Open_Mirror",
-    ["Respec"] = "Shout_Open_Respec"
+    ["Respec"] = "Shout_Open_Respec",
+    ["Restore"] = "Shout_Reset_Appearance"
 }
 
 Constants.DefaultUUIDs = {
@@ -385,6 +386,68 @@ Constants.ReallyTags = {
     "3a5efd84-5925-4a75-83ee-4f336b56f716", -- ["REALLY_ZARIELTIEFLING"]
 }
 
+Constants.OriginCharacterCreationStats = {
+    ["S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255"] = {
+        BodyShape = 0,
+        BodyType = 0,
+        Race = "6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a",
+        SubRace = "4fda6bce-0b91-4427-901f-690c2d091c47"
+    },
+    ["S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12"] = {
+        BodyShape = 0,
+        BodyType = 1,
+        Race = "bdf9b779-002c-4077-b377-8ea7c1faa795",
+        SubRace = "00000000-0000-0000-0000-000000000000"
+    },
+    ["S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b"] = {
+        BodyShape = 0,
+        BodyType = 1,
+        Race = "4f5d1434-5175-4fa9-b7dc-ab24fba37929",
+        SubRace = "c5f8ebdd-f4a5-4d2d-9eab-4a8d1b1dd724"
+    },
+    ["S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a"] = {
+        BodyShape = 0,
+        BodyType = 1,
+        Race = "45f4ac10-3c89-4fb2-b37d-f973bb9110c0",
+        SubRace = "30fafb0b-7c8b-4917-bd2a-536233b35d3c"
+    },
+    ["S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323"] = {
+        BodyShape = 1,
+        BodyType = 0,
+        Race = "6c038dcb-7eb5-431d-84f8-cecfaf1c0c5a",
+        SubRace = "a459ba68-a9ec-4c8e-b127-602615f5b4c0"
+    },
+    ["S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba"] = {
+        BodyShape = 1,
+        BodyType = 0,
+        Race = "0eb594cb-8820-4be6-a58d-8be7a1a98fba",
+        SubRace = "00000000-0000-0000-0000-000000000000"
+    },
+    ["S_Player_Wyll_c774d764-4a17-48dc-b470-32ace9ce447d"] = {
+        BodyShape = 0,
+        BodyType = 0,
+        Race = "0eb594cb-8820-4be6-a58d-8be7a1a98fba",
+        SubRace = "00000000-0000-0000-0000-000000000000"
+    },
+    ["S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c"] = {
+        BodyShape = 1,
+        BodyType = 1,
+        Race = "b6dccbed-30f3-424b-a181-c4540cf38197",
+        SubRace = "88d0d219-9dcb-462b-aab6-ccf31eeee2e3"
+    },
+    ["S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"] = {
+        BodyShape = 0,
+        BodyType = 0,
+        Race = "0eb594cb-8820-4be6-a58d-8be7a1a98fba",
+        SubRace = "00000000-0000-0000-0000-000000000000"
+    },
+    ["S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679"] = {
+        BodyShape = 0,
+        BodyType = 1,
+        Race = "45f4ac10-3c89-4fb2-b37d-f973bb9110c0",
+        SubRace = "30fafb0b-7c8b-4917-bd2a-536233b35d3c"
+    },
+}
 
 Constants.OriginCharacterCreationAppearances = {
     ["S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255"] = {
@@ -538,9 +601,9 @@ Constants.OriginCharacterCreationAppearances = {
         EyeColor = "e128e440-1b47-4ccf-b054-a04de97bf8d1",
         SkinColor = "8a99c4cd-87b4-4c2f-b74f-32e643634913",
         Visuals = {
-            ["1"] = "3b6f87b2-8f4e-43a1-be9c-9a65f9d82a2c",
-            ["3"] = "864be61c-7d6e-4855-8754-d772d8c7558a",
-            ["4"] = "0bb9adab-90e5-4013-ae98-96a092c389e9"
+            ["1"] = "0bb9adab-90e5-4013-ae98-96a092c389e9",
+            ["2"] = "3b6f87b2-8f4e-43a1-be9c-9a65f9d82a2c"
+            -- ["2"] = "864be61c-7d6e-4855-8754-d772d8c7558a",
         },
         AdditionalChoices = {
             ["1"] = 0,
@@ -620,9 +683,8 @@ Constants.OriginCharacterCreationAppearances = {
         EyeColor = "89983ad8-9350-45a5-bbf0-0266f3f00a74",
         SkinColor = "5b7fb798-3c6b-49e4-ad6f-5cd0d37ede59",
         Visuals = {
-            ["1"] = "a0da3200-3b71-4888-a2ae-1b1d2b45b36d",
-            ["2"] = "a0da3200-3b71-4888-a2ae-1b1d2b45b36d",
-            ["3"] = "92a7266d-98d1-4b37-8c3e-4a5a8b5e5bb8"
+            ["1"] = "92a7266d-98d1-4b37-8c3e-4a5a8b5e5bb8",
+            ["2"] = "a0da3200-3b71-4888-a2ae-1b1d2b45b36d"
         },
         AdditionalChoices = {
             ["1"] = 0,
@@ -784,7 +846,8 @@ Constants.OriginCharacterCreationAppearances = {
         SkinColor = "bffc9f01-414f-45f7-a89d-14b45c5f2155",
         Visuals = {
             ["1"] = "3462f953-acac-4417-9367-0966aaddcfc4",
-            ["2"] = "d02a560c-dd2b-4a2f-be8d-b0b706ddcdf0"
+            ["2"] = "d02a560c-dd2b-4a2f-be8d-b0b706ddcdf0",
+            ["3"] = "ccfc09b8-9e49-45f9-8034-bc573875facd"
         },
         AdditionalChoices = {
             ["1"] = 0,
@@ -1030,7 +1093,8 @@ Constants.OriginCharacterCreationAppearances = {
         Visuals = {
             ["1"] = "72b8f0a3-0db4-47c6-8336-f0e94f2b27ac",
             ["2"] = "a88ca34b-f482-4eef-903b-3a5243dbd4dc",
-            ["3"] = "ae42b59a-ae23-4ed9-b020-9d791f1495ae"
+            ["3"] = "ae42b59a-ae23-4ed9-b020-9d791f1495ae",
+            ["4"] = "479c9534-2905-4fd5-a8a9-5d8d087af777"
         },
         AdditionalChoices = {
             ["1"] = 0,
@@ -1192,7 +1256,8 @@ Constants.OriginCharacterCreationAppearances = {
         SkinColor = "4ffc17a5-3a58-4d38-93b6-d08455aaf602",
         Visuals = {
             ["1"] = "2536df90-05ea-492e-8fc9-33cd74a7f0cd",
-            ["2"] = "06d99409-955b-474b-91ed-6fb8a69e3d3d"
+            ["2"] = "06d99409-955b-474b-91ed-6fb8a69e3d3d",
+            ["3"] = "0f4ba7a4-920a-4d9c-8e20-36300faa217d"
         },
         AdditionalChoices = {
             ["1"] = 0,

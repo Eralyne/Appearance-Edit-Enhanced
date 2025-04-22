@@ -3,6 +3,8 @@
 local CCTracker = {}
 
 Ext.Entity.Subscribe("CCState", function(entity, _, _)
+    ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
     -- Adjust templates
     local CCState = entity.CCState.HasDummy
     local char = entity.Uuid.EntityUuid
@@ -10,32 +12,34 @@ Ext.Entity.Subscribe("CCState", function(entity, _, _)
     if (not CCTracker[char]) then
         CCTracker[char] = CCState
         if (CCState) then
-            if (Utils.Size(PersistentVars["OriginalTemplates"]) > 0) then
+            if (Utils.Size(ModVars["OriginalTemplates"]) > 0) then
                 Utils.ShiftEquipmentVisual(char)
             end
         else
             -- Triggers every time we change for the first time, however, keeping just in-case
-            if (Utils.Size(PersistentVars["OriginalTemplates"]) > 0) then
+            if (Utils.Size(ModVars["OriginalTemplates"]) > 0) then
                 Utils.ShiftEquipmentVisual(char, true)
             end
         end
     elseif (not CCTracker[char] and CCState) then
         CCTracker[char] = CCState
-        if (Utils.Size(PersistentVars["OriginalTemplates"]) > 0) then
+        if (Utils.Size(ModVars["OriginalTemplates"]) > 0) then
             Utils.ShiftEquipmentVisual(char)
         end
     elseif (CCTracker[char] and not CCState) then
         CCTracker[char] = CCState
-        if (Utils.Size(PersistentVars["OriginalTemplates"]) > 0) then
+        if (Utils.Size(ModVars["OriginalTemplates"]) > 0) then
             Utils.ShiftEquipmentVisual(char, true)
         end
     end
 end)
 
 Ext.Entity.Subscribe("HotbarContainer", function(entity, _, _)
+    ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
     local UUIDChar = entity.Uuid.EntityUuid
 
-    local PersistantChar = PersistentVars["SpellOwners"][UUIDChar]
+    local PersistantChar = ModVars["SpellOwners"][UUIDChar]
 
     if (PersistantChar and PersistantChar["Slot"]) then
         local barIndex, _, slotIndex = Utils.FindSpellIndexOnHotbar(UUIDChar, Constants.CustomSpells["SpellsContainer"])
@@ -47,6 +51,8 @@ Ext.Entity.Subscribe("HotbarContainer", function(entity, _, _)
 end)
 
 Ext.Entity.Subscribe("GameObjectVisual", function(entity, _, _)
+    ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
     local UUIDChar = entity.Uuid.EntityUuid
 
     local GOV = entity.GameObjectVisual
@@ -55,9 +61,9 @@ Ext.Entity.Subscribe("GameObjectVisual", function(entity, _, _)
     local success, _ = pcall(Utils.TryGetProxy, entity, "CharacterCreationAppearance")
 
     if (success) then
-        if (PersistentVars["OriginalTemplates"]
-                and PersistentVars["OriginalTemplates"][UUIDChar]
-                and GOV.RootTemplateId == PersistentVars["OriginalTemplates"][UUIDChar]["CopiedId"]) then
+        if (ModVars["OriginalTemplates"]
+                and ModVars["OriginalTemplates"][UUIDChar]
+                and GOV.RootTemplateId == ModVars["OriginalTemplates"][UUIDChar]["CopiedId"]) then
             if (GOV.Type == 4) then
                 entity.GameObjectVisual.Type = 2
                 Utils.CopyAppearanceVisuals(UUIDChar)
