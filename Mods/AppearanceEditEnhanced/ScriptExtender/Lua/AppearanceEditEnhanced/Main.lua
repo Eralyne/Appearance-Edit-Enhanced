@@ -196,79 +196,84 @@ Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(event)
             end
 
             TempChar = nil
+            SpellCaster = nil
         end
     end
 end)
 
+
+-- TODO: Allow resetting origin appearance back to original
 Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(character)
-    -- This prevents errors when starting a new game.
-    if (Ext.Entity.Get(character).Origin == nil) then return end
+    if (SpellCaster) then
+        -- This prevents errors when starting a new game.
+        if (Ext.Entity.Get(character).Origin == nil) then return end
 
-    local playerID = Osi.GetReservedUserID(character)
-    local recruiterID = Osi.GetReservedUserID(SpellCaster)
+        local playerID = Osi.GetReservedUserID(character)
+        local recruiterID = Osi.GetReservedUserID(SpellCaster)
 
-    if (playerID == recruiterID) then
-        -- Persist Variables for SpellCaster
-        Utils.PersistTemplateValues(SpellCaster, character)
+        if (playerID == recruiterID) then
+            -- Persist Variables for SpellCaster
+            Utils.PersistTemplateValues(SpellCaster, character)
 
-        Osi.Transform(SpellCaster, character, "6f45d3b8-fa22-4bae-919c-9c2757bff470")
-        Utils.FixREALLYTags(SpellCaster, character)
-        -- Can't clear Genital tag properly :(
-        -- Utils.FixGenitalTags(SpellCaster, uuid)
+            Osi.Transform(SpellCaster, character, "6f45d3b8-fa22-4bae-919c-9c2757bff470")
+            Utils.FixREALLYTags(SpellCaster, character)
+            -- Can't clear Genital tag properly :(
+            -- Utils.FixGenitalTags(SpellCaster, uuid)
 
-        -- Utils.Debug("CopiedTav: " .. uuid)
+            -- Utils.Debug("CopiedTav: " .. uuid)
 
-        local oldEntity = Ext.Entity.Get(SpellCaster)
-        local newEntity = Ext.Entity.Get(character)
+            local oldEntity = Ext.Entity.Get(SpellCaster)
+            local newEntity = Ext.Entity.Get(character)
 
-        for _, entry in ipairs(Constants.Replications) do
-            Utils.CloneEntityEntry(oldEntity, newEntity, entry)
-        end
+            for _, entry in ipairs(Constants.Replications) do
+                Utils.CloneEntityEntry(oldEntity, newEntity, entry)
+            end
 
-        -- Do special work for origins/hirelings
-        if (Utils.IsOrigin(SpellCaster) or Utils.IsHireling(SpellCaster)) then
-            ModVars["OriginCopiedChars"][SpellCaster] = character
+            -- Do special work for origins/hirelings
+            if (Utils.IsOrigin(SpellCaster) or Utils.IsHireling(SpellCaster)) then
+                ModVars["OriginCopiedChars"][SpellCaster] = character
+
+                -- Dirty variable
+                ModVars["OriginCopiedChars"] = ModVars["OriginCopiedChars"]
+
+                -- I'm worried this may cause issues but.... I can't think of any other workaround
+                Utils.CloneProxy(oldEntity.ServerCharacter.Template, newEntity.ServerCharacter.Template)
+                Utils.ShiftEquipmentVisual(SpellCaster, true)
+            else
+                -- Clone voice for Tavs
+                Utils.CloneEntityEntry(oldEntity, newEntity, "Voice")
+            end
+
+            --ModVars["NewTemplateIcon"][SpellCaster] = newEntity.character.Template.Icon
 
             -- Dirty variable
-            ModVars["OriginCopiedChars"] = ModVars["OriginCopiedChars"]
+            --ModVars["NewTemplateIcon"] = ModVars["NewTemplateIcon"]
 
-            -- I'm worried this may cause issues but.... I can't think of any other workaround
-            Utils.CloneProxy(oldEntity.ServerCharacter.Template, newEntity.ServerCharacter.Template)
-            Utils.ShiftEquipmentVisual(SpellCaster, true)
+            -- Extra replications that we want to only partially copy
+            oldEntity.CharacterCreationStats.BodyType = newEntity.CharacterCreationStats.BodyType
+            oldEntity.CharacterCreationStats.BodyShape = newEntity.CharacterCreationStats.BodyShape
+            oldEntity.CharacterCreationStats.Race = newEntity.CharacterCreationStats.Race
+            oldEntity.CharacterCreationStats.SubRace = newEntity.CharacterCreationStats.SubRace
+            oldEntity:Replicate("CharacterCreationStats")
+
+            oldEntity.Background.Background = newEntity.Background.Background
+            oldEntity:Replicate("Background")
+
+            --oldEntity.Character.BaseVisual = newEntity.Character.BaseVisual -- This does nothing rn, this might be the culprit
+
+            Utils.CopyAppearanceVisuals(SpellCaster)
+
+            -- Remove
+            Utils.RemoveCharacter(character)
+
+            TempChar = character
+
+            Osi.TimerLaunch("APPEARANCE_EDIT_RESCULPT_FINISHED", 1000)
+
+            Osi.MakePlayerActive(SpellCaster)
         else
-            -- Clone voice for Tavs
-            Utils.CloneEntityEntry(oldEntity, newEntity, "Voice")
+            -- Non-recruiting multiplayer clicked on custom origin
+            Utils.RemoveCharacter(character)
         end
-
-        --ModVars["NewTemplateIcon"][SpellCaster] = newEntity.character.Template.Icon
-
-        -- Dirty variable
-        --ModVars["NewTemplateIcon"] = ModVars["NewTemplateIcon"]
-
-        -- Extra replications that we want to only partially copy
-        oldEntity.CharacterCreationStats.BodyType = newEntity.CharacterCreationStats.BodyType
-        oldEntity.CharacterCreationStats.BodyShape = newEntity.CharacterCreationStats.BodyShape
-        oldEntity.CharacterCreationStats.Race = newEntity.CharacterCreationStats.Race
-        oldEntity.CharacterCreationStats.SubRace = newEntity.CharacterCreationStats.SubRace
-        oldEntity:Replicate("CharacterCreationStats")
-
-        oldEntity.Background.Background = newEntity.Background.Background
-        oldEntity:Replicate("Background")
-
-        --oldEntity.Character.BaseVisual = newEntity.Character.BaseVisual -- This does nothing rn, this might be the culprit
-
-        Utils.CopyAppearanceVisuals(SpellCaster)
-
-        -- Remove
-        Utils.RemoveCharacter(character)
-
-        TempChar = character
-
-        Osi.TimerLaunch("APPEARANCE_EDIT_RESCULPT_FINISHED", 1000)
-
-        Osi.MakePlayerActive(SpellCaster)
-    else
-        -- Non-recruiting multiplayer clicked on custom origin
-        Utils.RemoveCharacter(character)
     end
 end)
