@@ -160,6 +160,10 @@ Ext.Osiris.RegisterListener("CharacterCreationFinished", 0, "before", function()
     if SaveLoaded then
         CharacterCreated = true
 
+        -- Set CC to false if it's not set to false within 2.5 seconds (should be ample time)
+        -- This prevents issues of running our resculpt code on non-resculpt events
+        Osi.TimerLaunch("APPEARANCE_EDIT_CREATION_CHECK", 2500)
+
         -- Remove Daisies
         -- TODO: Potentially do this better?
         for _, entry in pairs(Osi["DB_GLO_DaisyAwaitsAvatar"]:Get(nil, nil)) do
@@ -174,37 +178,10 @@ Ext.Osiris.RegisterListener("CharacterCreationFinished", 0, "before", function()
     end
 end)
 
-Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(event)
-    if event == "APPEARANCE_EDIT_RESCULPT_FINISHED" then
-        if SaveLoaded and SpellCaster and TempChar then
-            ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+local function doResculptOperations(character)
+    if (SaveLoaded and CharacterCreated and SpellCaster) then
+        CharacterCreated = false
 
-            local copiedEntity = Ext.Entity.Get(TempChar)
-
-            -- Clone Racial Cantrip
-            for _, s in pairs(copiedEntity.SpellBookPrepares.PreparedSpells) do
-                if (s.SourceType == "Progression2") then
-                    if (ModVars.CantripSpell[SpellCaster] and Osi.HasSpell(SpellCaster, ModVars.CantripSpell[SpellCaster])) then
-                        Osi.RemoveSpell(SpellCaster, ModVars.CantripSpell[SpellCaster])
-                    end
-
-                    Osi.AddSpell(SpellCaster, s.OriginatorPrototype)
-
-                    ModVars.CantripSpell[SpellCaster] = s.OriginatorPrototype
-                    ModVars.CantripSpell = ModVars.CantripSpell
-                end
-            end
-
-            TempChar = nil
-            SpellCaster = nil
-        end
-    end
-end)
-
-
--- TODO: Allow resetting origin appearance back to original
-Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(character)
-    if (SpellCaster) then
         -- This prevents errors when starting a new game.
         if (Ext.Entity.Get(character).Origin == nil) then return end
 
@@ -276,4 +253,39 @@ Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(charact
             Utils.RemoveCharacter(character)
         end
     end
+end
+
+Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(event)
+    if event == "APPEARANCE_EDIT_RESCULPT_FINISHED" then
+        if SaveLoaded and SpellCaster and TempChar then
+            ModVars = Ext.Vars.GetModVariables(Constants.ModUUID)
+
+            local copiedEntity = Ext.Entity.Get(TempChar)
+
+            -- Clone Racial Cantrip
+            for _, s in pairs(copiedEntity.SpellBookPrepares.PreparedSpells) do
+                if (s.SourceType == "Progression2") then
+                    if (ModVars.CantripSpell[SpellCaster] and Osi.HasSpell(SpellCaster, ModVars.CantripSpell[SpellCaster])) then
+                        Osi.RemoveSpell(SpellCaster, ModVars.CantripSpell[SpellCaster])
+                    end
+
+                    Osi.AddSpell(SpellCaster, s.OriginatorPrototype)
+
+                    ModVars.CantripSpell[SpellCaster] = s.OriginatorPrototype
+                    ModVars.CantripSpell = ModVars.CantripSpell
+                end
+            end
+            TempChar = nil
+            SpellCaster = false
+        end
+    elseif event == "APPEARANCE_EDIT_CREATION_CHECK" then
+        CharacterCreated = false
+    elseif event == "APPEARANCE_EDIT_RESCULPT_STARTED" then
+        doResculptOperations(TempChar)
+    end
+end)
+
+Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(character)
+    TempChar = character
+    Osi.TimerLaunch("APPEARANCE_EDIT_RESCULPT_STARTED", 1500)
 end)
